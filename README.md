@@ -22,7 +22,7 @@ apt install python3-venv
 sudo groupadd -gid 99 rn_irl
 
 ## Get the source code - doesn't matter where you place it at this time.
-github clone https://github.com/NTNU-TTO/rn_irl  
+git clone https://github.com/NTNU-TTO/rn_irl  
 sudo chown root:rn_irl -R rn_irl  
 
 ## Set up a persistent python environment to run in.
