@@ -71,11 +71,11 @@ with about:
 
         if dark_mode:
 
-            st.image('static/KTH_logo_RGB_vit.png', use_column_width="auto")
+            st.image('static/KTH_logo_RGB_vit.png', use_container_width="auto")
 
         else:
 
-            st.image('static/KTH_logo_RGB.png', use_column_width="auto")
+            st.image('static/KTH_logo_RGB.png', use_container_width="auto")
 
     with c4:
 
