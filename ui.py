@@ -18,6 +18,9 @@ You should have received a copy of the GNU Affero General Public License
 along with Really Nice IRL. If not, see:
 <https://www.gnu.org/licenses/agpl-3.0.html>.
 """
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 import pandas as pd
 import streamlit as st
 import time
