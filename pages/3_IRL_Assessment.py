@@ -214,9 +214,8 @@ def on_save_assessment():
     irl_ass.update()
     ss.refresh = True
 
-    # Keep action points if applicable.
     keep_ass = ss.get('keep_ass', False)
- 
+
     if keep_ass:
 
         base.copy_aps(old_ass_id, irl_ass.id)
@@ -296,7 +295,7 @@ def assessment_view(project, read_only=False):
 
         with plot:
 
-            header = "<h3 style='text-align: center;'>Innovation Readiness Level<br>%s</h3>"
+            header = "<h3 style='text-align: center;'>KTH Innovation Readiness Level™<br>%s</h3>"
             st.markdown(header % project, unsafe_allow_html=True)
 
             if project is not None:
@@ -326,6 +325,7 @@ def assessment_view(project, read_only=False):
             if not read_only:
 
                 read_only = not ass_changed
+
     # Set up all the descriptions and tables.
     with col2:
 
@@ -404,7 +404,7 @@ def history_view(project):
 
         with col1:
 
-            header = "<h3 style='text-align: center;'>Innovation Readiness Level<br>%s</h3>"
+            header = "<h3 style='text-align: center;'>KTH Innovation Readiness Level™<br>%s</h3>"
             st.markdown(header % ss.project,
                         unsafe_allow_html=True)
 
@@ -483,7 +483,7 @@ def progress_view(project):
 
     with col1:
 
-        header = "<h3 style='text-align: center;'>Innovation Readiness Level<br>%s</h3>"
+        header = "<h3 style='text-align: center;'>KTH Innovation Readiness Level™<br>%s</h3>"
         st.markdown(header % ss.project,
                     unsafe_allow_html=True)
 

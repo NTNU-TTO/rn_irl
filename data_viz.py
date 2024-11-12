@@ -28,6 +28,7 @@ import numpy as np
 from scipy.interpolate import interp1d
 from statistics import mean
 
+KTH = "KTH Innovation\nReadiness Level™"
 
 IRL_CMAP = mc.LinearSegmentedColormap.from_list("IRL_CMAP",
                                                 [(0.0000, "#A8202F"),
@@ -92,9 +93,20 @@ def plot_irl(irl_data, smooth=False, dark_mode=True, targets=False):
     m_x, m_y = np.meshgrid(np.linspace(-1, 1, 256), np.linspace(-1, 1, 256))
     R = np.sqrt((m_x)**2 + (m_y)**2)
     R *= 9/R.max()
-    irl_norm = mc.Normalize(0.5, 5)
+#    irl_norm = mc.Normalize(0.5, 5)
+    irl_norm = mc.Normalize(1.0, 5.5)
 
-    for i in range(1, 10):
+    ax.text(0,
+            0,
+            KTH,
+            size=5,
+            ha="center",
+            va="center",
+            color="white")
+#            path_effects=[pe.withStroke(linewidth=1,
+#                                        foreground=fg)])
+
+    for i in range(2, 11):
 
         circle = plt.Circle((0, 0),
                             i,
@@ -108,8 +120,8 @@ def plot_irl(irl_data, smooth=False, dark_mode=True, targets=False):
     # Plot spokes and labels.
     for irl_cat, irl_label in zip(irl_cats, irl_labels):
 
-        x = np.cos(irl_cat)*10
-        y = np.sin(irl_cat)*10
+        x = np.cos(irl_cat)*11
+        y = np.sin(irl_cat)*11
         ax.plot([x, 0], [y, 0], color=fc, linestyle=':', linewidth=0.5)
 
         # IRL labels.
@@ -140,8 +152,8 @@ def plot_irl(irl_data, smooth=False, dark_mode=True, targets=False):
     # Calculate IRL positions values.
     for irl_val, irl_cat in zip(irl_vals, irl_cats):
 
-        x = np.cos(irl_cat)*irl_val
-        y = np.sin(irl_cat)*irl_val
+        x = np.cos(irl_cat)*(irl_val + 1)
+        y = np.sin(irl_cat)*(irl_val + 1)
 
         xs.append(x)
         ys.append(y)
@@ -164,8 +176,8 @@ def plot_irl(irl_data, smooth=False, dark_mode=True, targets=False):
 
         for irl_t_val, irl_cat in zip(irl_targets, irl_cats):
 
-            xt = np.cos(irl_cat)*irl_t_val
-            yt = np.sin(irl_cat)*irl_t_val
+            xt = np.cos(irl_cat)*(irl_t_val + 1)
+            yt = np.sin(irl_cat)*(irl_t_val + 1)
             xts.append(xt)
             yts.append(yt)
 
@@ -240,7 +252,7 @@ def plot_irl(irl_data, smooth=False, dark_mode=True, targets=False):
         ax.imshow(R,
                   cmap=IRL_CMAP,
                   norm=irl_norm,
-                  extent=(-9, 9, -9, 9),
+                  extent=(-10, 10, -10, 10),
                   origin="lower",
                   clip_on=True,
                   clip_path=irl_t,
@@ -250,14 +262,15 @@ def plot_irl(irl_data, smooth=False, dark_mode=True, targets=False):
     ax.imshow(R,
               cmap=IRL_CMAP,
               norm=irl_norm,
-              extent=(-9, 9, -9, 9),
+              extent=(-10, 10, -10, 10),
               origin="lower",
               clip_on=True,
               clip_path=irl,
               alpha=0.999)
-    ax.set_xlim([-10, 10])
-    ax.set_ylim([-10, 10])
+    ax.set_xlim([-11, 11])
+    ax.set_ylim([-11, 11])
     ax.set_aspect('equal', adjustable='box')
+
     fig.patch.set_facecolor('none')
     ax.patch.set_facecolor('none')
     plt.axis('off')

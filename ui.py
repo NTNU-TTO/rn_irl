@@ -27,6 +27,8 @@ import utils
 
 from streamlit import session_state as ss
 
+ABOUT_TXT = "User Friendly KTH Innovation Readiness Level™ Assessment Tool\n\
+            Copyright (c) Lodve Berre and NTNU Technology Transfer AS"
 
 HIDE_TABLE_ROW_INDEX = """
                        <style>
@@ -48,7 +50,7 @@ IRL_COLOR_MAP = {9: '#37953B',
 # Default menu items.
 menu_items = {"Get Help": "https://kthinnovationreadinesslevel.com/",
               "Report a Bug": "https://github.com/NTNU-TTO/rn_irl/issues",
-              "About": "User Friendly KTH IRL Assessment Tool(tm)"}
+              "About": ABOUT_TXT}
 
 
 # Detailed IRL scale descriptions.
@@ -119,7 +121,7 @@ def on_init_system():
         ss.user = user
         ss.user_settings = base.get_user_settings(user.user_id)
         ss.dark_mode = ss.user_settings.dark_mode
-        ss.projects = base.get_projects(user)
+        ss.projects = base.get_projects(user, ss.user_settings.filter_on_user)
         ss['go_to_page'] = 'pages/5_Settings.py'
         ss.refresh = False
 
