@@ -121,8 +121,10 @@ def plot_irl(irl_data, smooth=False, dark_mode=True, targets=False):
     for irl_cat, irl_label in zip(irl_cats, irl_labels):
 
         x = np.cos(irl_cat)*11
+        xx = np.cos(irl_cat)*2
         y = np.sin(irl_cat)*11
-        ax.plot([x, 0], [y, 0], color=fc, linestyle=':', linewidth=0.5)
+        yy = np.sin(irl_cat)*2
+        ax.plot([x, xx], [y, yy], color=fc, linestyle=':', linewidth=0.5)
 
         # IRL labels.
         rotation = int(np.rad2deg(irl_cat)-90)
