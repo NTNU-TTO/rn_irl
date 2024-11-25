@@ -30,6 +30,22 @@ from streamlit import session_state as ss
 BACKEND = 'sqlite'
 
 
+def datetime2dbdate(datetime):
+    """
+    Convenience method to convert from datetime.date to ISO standard
+    date string which we store in the database.
+
+    Returns
+    -------
+    date : str
+        ISO standard date (YYYY-MM-DD).
+    """
+
+    dbdate = '%d-%02d-%02d' % (datetime.year, datetime.month, datetime.day)
+
+    return dbdate
+
+
 def dbdate2datetime(date):
 
     if date is None:
@@ -58,9 +74,24 @@ def dbdates2datetimes(date_list):
 
 
 def get_IRL_data(user):
+    """
+    Utility method for getting IRL data.
+    Will only refresh from database when needed.
 
+    Parameters
+    ----------
+    user : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
+    """
+
+    refresh = ss.get("refresh", True)
     # Fetch from database only when and if we need to do so.
-    if ss.get("refresh", True):
+    if refresh:
 
         filt = ss.user_settings.filter_on_user
         ss.projects = base.get_projects(user, filt)

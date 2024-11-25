@@ -706,7 +706,7 @@ def add_user():
     elif status == 1:
 
         st.success("New user successfully added!")
-        time.sleep(1)
+        time.sleep(2)
         status = ss.add_new_user_status = None
         st.rerun()
 

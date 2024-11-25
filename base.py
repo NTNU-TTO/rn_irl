@@ -273,6 +273,7 @@ class IRLAssessment(Base, SerializerMixin):
 
     def update(self, overwrite=False):
 
+        error = None
         engine = create_engine(st.secrets.db_details.db_path)
         Base.metadata.create_all(bind=engine)
         Session = sessionmaker()
@@ -341,9 +342,18 @@ class IRLAssessment(Base, SerializerMixin):
 
             session.add(new_irl)
 
-        session.commit()
-        session.close()
-        engine.dispose()
+        try:
+
+            session.commit()
+            session.close()
+            engine.dispose()
+
+        except BaseException:
+
+            # tb = sys.exception().__traceback__
+            error = "Could not save assessment to the database."
+
+        return error
 
     def __eq__(self, other):
 
@@ -661,6 +671,22 @@ def get_irl(irl_ass_id):
     engine.dispose()
 
     return irl_ass
+
+
+def get_irl_ass_id(project_id):
+
+    engine = create_engine(st.secrets.db_details.db_path)
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    irl_ass = session.query(IRLAssessment).filter(
+                   IRLAssessment.project_no == project_id).order_by(
+                       (IRLAssessment.assessment_date)).all()[-1]
+    new_ass_id = irl_ass.id
+    session.close()
+    engine.dispose()
+
+    return new_ass_id
 
 
 def irl_ass_changed(irl_ass):
@@ -1750,6 +1776,28 @@ def get_action_points(irl_ass_id, irl_type=None):
 
 
 def ap_completed(irl_ass_id):
+    """
+    Check if all action points are completed before making a new assessment.
+    ALSO - if today's date == irl_ass_id.assessment_date, return True.'
+
+    Parameters
+    ----------
+    irl_ass_id : Integer
+        IRL Assessment ID.
+
+    Returns
+    -------
+    completed : Bool
+        True if all action points completed, False is not.
+
+    """
+    date = utils.datetime2dbdate(datetime.now())
+    irl = get_irl(irl_ass_id)
+    ass_date = irl.assessment_date
+
+    if date == ass_date:
+
+        return True
 
     engine = create_engine(st.secrets.db_details.db_path)
     Base.metadata.create_all(bind=engine)
@@ -1763,7 +1811,7 @@ def ap_completed(irl_ass_id):
     session.close()
     engine.dispose()
 
-    completed = (len(aps)*100 == completion) or (len(aps) == 0)
+    completed = (len(aps)*100 == completion) or len(aps) == 0
 
     return completed
 
@@ -1785,8 +1833,16 @@ def copy_aps(old_ass_id, new_ass_id):
 
     """
 
-    old_aps = get_action_points(old_ass_id)
+    engine = create_engine(st.secrets.db_details.db_path)
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    old_aps = session.query(ActionPoint).filter(
+                           ActionPoint.assessment_id == old_ass_id).all()
 
     for old_ap in old_aps:
 
         old_ap.copy(new_ass_id)
+
+    session.close()
+    engine.dispose()

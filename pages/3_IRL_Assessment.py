@@ -22,6 +22,7 @@ along with Really Nice IRL. If not, see:
 import streamlit as st
 import base
 import data_viz
+import time
 import ui
 import utils
 
@@ -30,10 +31,12 @@ from streamlit import session_state as ss
 
 @st.dialog("You have incomplete action points!")
 def override_dlg():
-    label = "Not all action points defined to increase the IRL are complete.  \n"
-    label += "What do you want to do with these action points?"
-    action = st.radio(label, ["Keep unfinished action points",
-                              "Discard all action points"])
+    ss.override_dlg_done = False
+    ss.keep_ass = None
+    lbl = "Not all action points defined to increase the IRL are complete.  \n"
+    lbl += "What do you want to do with these action points?"
+    action = st.radio(lbl, ["Keep unfinished action points",
+                            "Discard all action points"])
     cols = st.columns(2)
 
     with cols[0]:
@@ -41,6 +44,7 @@ def override_dlg():
         if st.button("Save assessment"):
 
             ss.keep_ass = (action == "Keep unfinished action points")
+            ss.override_dlg_done = True
             st.rerun()
 
     with cols[1]:
@@ -48,6 +52,7 @@ def override_dlg():
         if st.button("Cancel"):
 
             st.keep_ass = None
+            ss.override_dlg_done = True
             st.rerun()
 
 
@@ -199,8 +204,15 @@ def on_save_assessment():
     """
     Save updated assessment values to database.
     """
+    keep_ass = ss.get('keep_ass', None)
     irl_ass = ss.project
     old_ass_id = irl_ass.id
+
+    if keep_ass is None:
+
+        ss.save_ass_state = None
+
+        return
 
     # Update all values from UI values.
     irl_ass.crl = ss.crl
@@ -211,16 +223,24 @@ def on_save_assessment():
     irl_ass.frl = ss.frl
 
     # ...and save to database...
-    irl_ass.update()
+    error = irl_ass.update()
     ss.refresh = True
-
-    keep_ass = ss.get('keep_ass', False)
+    new_ass_id = base.get_irl_ass_id(ss.project.project_no)
 
     if keep_ass:
 
-        base.copy_aps(old_ass_id, irl_ass.id)
+        base.copy_aps(old_ass_id, new_ass_id)
 
     ss.keep_ass = None
+
+    if error is None:
+
+        ss.save_ass_state = 1
+
+    else:
+
+        ss.save_ass_state = 0
+        ss.save_ass_error = error
 
 
 def assessment_view(project, read_only=False):
@@ -295,7 +315,8 @@ def assessment_view(project, read_only=False):
 
         with plot:
 
-            header = "<h3 style='text-align: center;'>KTH Innovation Readiness Level™<br>%s</h3>"
+            header = "<h3 style='text-align: center;'>\
+                      KTH Innovation Readiness Level™<br>%s</h3>"
             st.markdown(header % project, unsafe_allow_html=True)
 
             if project is not None:
@@ -310,8 +331,16 @@ def assessment_view(project, read_only=False):
         with targets:
 
             # Target levels and notes.
+            ass_changed = base.irl_ass_changed(project)
+
             if read_only:
 
+                ui.show_action_points('ass', project, None)
+
+            elif ass_changed:
+
+                st.warning("You have unsaved assessment changes.\
+                           Please save these first.")
                 ui.show_action_points('ass', project, None)
 
             else:
@@ -319,8 +348,6 @@ def assessment_view(project, read_only=False):
                 ui.make_action_points('ass',
                                       project,
                                       on_IRL_ap_changed)
-
-            ass_changed = base.irl_ass_changed(project)
 
             if not read_only:
 
@@ -338,17 +365,38 @@ def assessment_view(project, read_only=False):
     if st.button("Save assessment", key='save_ass', disabled=read_only):
 
         # Check for incomplete action points.
-        ap_complete = base.ap_completed(project.id)
+        ap_complete = base.ap_completed(ss.project.id)
 
-        if not ap_complete:
+        if ap_complete:
+
+            ss.override_dlg_done = False
+            ss.keep_ass = False
+            on_save_assessment()
+
+        else:
 
             override_dlg()
 
-        keep_ass = ss.get("keep_ass", None)
+    odd = ss.get("override_dlg_done", False)
 
-        if ap_complete or keep_ass:
+    if odd:
 
-            on_save_assessment()
+        on_save_assessment()
+
+    state = ss.get("save_ass_state", None)
+
+    if state == 1:
+
+        st.success("Assessment saved!")
+        ss.save_ass_state = None
+        time.sleep(2)
+        st.rerun()
+
+    elif state == 0:
+
+        error = "There was a problem saving the assessment:\n  "
+        error += st.save_ass_error
+        st.error(error)
 
 
 def history_view(project):
