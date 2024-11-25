@@ -35,6 +35,7 @@ mv /etc/rn_irl/bin/rn_irl/irl.sdb /var/lib/rn_irl
 sed -i -e 's#db_path = sqlite:////irl.sdb#db_path = sqlite:////var//lib//rn_irl//irl.sdb#g' /etc/rn_irl/bin/rn_irl/.streamlit/secrets.toml
 
 # Create symlink for executable
+chmod ug+x /etc/rn_irl/bin/rn_irl/ubuntu_helpers/*.sh
 ln -s /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl.sh /bin/rn_irl
 
 # Copy service
