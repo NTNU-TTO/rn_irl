@@ -5,7 +5,7 @@ apt install sqlite3
 apt install python3-venv
 
 # Set up a common rn_irl group for users.
-groupadd -gid 99 rn_irl
+groupadd -g 99 rn_irl
 
 # Fetch source code
 git clone https://github.com/NTNU-TTO/rn_irl
