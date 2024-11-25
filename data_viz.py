@@ -93,7 +93,6 @@ def plot_irl(irl_data, smooth=False, dark_mode=True, targets=False):
     m_x, m_y = np.meshgrid(np.linspace(-1, 1, 256), np.linspace(-1, 1, 256))
     R = np.sqrt((m_x)**2 + (m_y)**2)
     R *= 9/R.max()
-#    irl_norm = mc.Normalize(0.5, 5)
     irl_norm = mc.Normalize(1.0, 5.5)
 
     ax.text(0,
@@ -103,8 +102,6 @@ def plot_irl(irl_data, smooth=False, dark_mode=True, targets=False):
             ha="center",
             va="center",
             color="white")
-#            path_effects=[pe.withStroke(linewidth=1,
-#                                        foreground=fg)])
 
     for i in range(2, 11):
 
@@ -293,7 +290,15 @@ def plot_irl_progress(irl0, irl1, smooth=False, dark_mode=True):
         fg = 'white'
 
     fig, ax = plt.subplots()
-    irl_norm = mc.Normalize(0, 9)
+    irl_norm = mc.Normalize(1.0, 10.0)
+
+    ax.text(0,
+            0,
+            KTH,
+            size=5,
+            ha="center",
+            va="center",
+            color="white")
 
     irl0 = [irl0.crl,
             irl0.trl,
@@ -333,7 +338,7 @@ def plot_irl_progress(irl0, irl1, smooth=False, dark_mode=True):
     R = np.sqrt((m_x)**2 + (m_y)**2)
     R *= 9/R.max()
 
-    for i in range(1, 10):
+    for i in range(2, 11):
 
         circle = plt.Circle((0, 0),
                             i,
@@ -347,10 +352,12 @@ def plot_irl_progress(irl0, irl1, smooth=False, dark_mode=True):
     # Plot spokes and labels.
     for irl_cat, irl_label in zip(irl_cats, irl_labels):
 
-        x = np.cos(irl_cat)*10
-        y = np.sin(irl_cat)*10
-        ax.plot([x, 0],
-                [y, 0],
+        x = np.cos(irl_cat)*11
+        xx = np.cos(irl_cat)*2
+        y = np.sin(irl_cat)*11
+        yy = np.sin(irl_cat)*2
+        ax.plot([x, xx],
+                [y, yy],
                 color=fc,
                 linestyle=':',
                 linewidth=0.5)
@@ -383,10 +390,10 @@ def plot_irl_progress(irl0, irl1, smooth=False, dark_mode=True):
     # Calculate IRL positions values.
     for irl0_val, irl1_val, irl_cat in zip(irl0, irl1, irl_cats):
 
-        x0 = np.cos(irl_cat)*irl0_val
-        y0 = np.sin(irl_cat)*irl0_val
-        x1 = np.cos(irl_cat)*irl1_val
-        y1 = np.sin(irl_cat)*irl1_val
+        x0 = np.cos(irl_cat)*(irl0_val + 1)
+        y0 = np.sin(irl_cat)*(irl0_val + 1)
+        x1 = np.cos(irl_cat)*(irl1_val + 1)
+        y1 = np.sin(irl_cat)*(irl1_val + 1)
 
         x0s.append(x0)
         y0s.append(y0)
@@ -459,12 +466,12 @@ def plot_irl_progress(irl0, irl1, smooth=False, dark_mode=True):
                                facecolor=IRL_CMAP(irl0_mean),
                                edgecolor='black',
                                linestyle='--',
-                               alpha=0.888)
+                               alpha=0.666)
 
         irl1 = patches.Polygon(np.asarray([xti, yti]).T,
                                facecolor=IRL_CMAP(irl1_mean),
                                edgecolor='black',
-                               alpha=0.888)
+                               alpha=0.666)
 
     else:
 
@@ -481,8 +488,8 @@ def plot_irl_progress(irl0, irl1, smooth=False, dark_mode=True):
     ax.add_patch(irl1)
     ax.add_patch(irl0)
 
-    ax.set_xlim([-10, 10])
-    ax.set_ylim([-10, 10])
+    ax.set_xlim([-11, 11])
+    ax.set_ylim([-11, 11])
     ax.set_aspect('equal', adjustable='box')
     fig.patch.set_facecolor('none')
     ax.patch.set_facecolor('none')
