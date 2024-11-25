@@ -49,8 +49,8 @@ sudo mkdir /var/lib/rn_irl
 sudo mv /etc/rn_irl/bin/rn_irl/irl.db /var/lib/rn_irl  
 
 ## Edit secrets.toml and update the path to the database:
-{db_details]  
-db_path = 'sqlite:////var//lib//rn_irl//irl.db  
+[db_details]  
+db_path = 'sqlite:////var//lib//rn_irl//irl.sdb  
 
 ## Create symlink bash script:
 sudo ln -s /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl.sh /bin/rn_irl  
