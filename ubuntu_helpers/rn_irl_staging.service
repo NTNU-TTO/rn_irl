@@ -1,0 +1,21 @@
+[Unit]
+
+Description=Really Nice IRL STAGING ENVIRONMENT
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStartPre=
+ExecStart=/bin/rn_irl_staging
+ExecStartPost=
+ExecStop=
+ExecReload=
+
+[Install]
+
+WantedBy=multi-user.target
