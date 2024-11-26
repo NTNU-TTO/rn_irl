@@ -33,7 +33,7 @@ mkdir /var/lib/rn_irl
 mv /etc/rn_irl/bin/rn_irl/irl.sdb /var/lib/rn_irl
 
 # Update default database path.
-sed -i -e 's#db_path = sqlite:////irl.sdb#db_path = sqlite:////var//lib//rn_irl//irl.sdb#g' /etc/rn_irl/bin/rn_irl/.streamlit/secrets.toml
+sed -i -e "s#db_path = 'sqlite:///irl.sdb'#db_path = 'sqlite:////var//lib//rn_irl//irl.sdb'#g" /etc/rn_irl/bin/rn_irl/.streamlit/secrets.toml
 
 # Create symlink for executable
 chmod ug+x /etc/rn_irl/bin/rn_irl/ubuntu_helpers/*.sh
