@@ -28,8 +28,8 @@ DATE=$(date -I)
 mv /etc/rn_irl /etc/rn_irl_$DATE
 
 # Move staging enviroment path to production.
-cp /etc/rn_irl/bin/ubuntu_helpers/rn_irl.sh /etc/rn_ril_staging/bin/ubuntu_helpers/rn_irl.sh
 mv /etc/rn_irl_staging /etc/rn_irl
+cp /etc/rn_irl_$DATE/bin/rn_irl/ubuntu_helpers/rn_irl.sh /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl.sh
 
 # Restart production environment.
 service rn_irl start
