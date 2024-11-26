@@ -29,7 +29,7 @@ chown root:rn_irl -R /etc/rn_irl_staging
 # Change ubuntu helpers.
 cd /etc/rn_irl_staging/bin/rn_irl/ubuntu_helpers
 sed -i -e 's/Really Nice IRL/Really Nice IRL STAGING/g' rn_irl.service
-sed -i -e 's#/bin/rn_irl#/bin/rn_irl_staging.sh#g' rn_irl.service
+sed -i -e 's#/bin/rn_irl#/bin/rn_irl_staging#g' rn_irl.service
 sed -i -e 's#/etc/rn_irl/bin#/etc/rn_irl_staging/bin#g' rn_irl.sh
 mv rn_irl.service rn_irl_staging.service
 mv rn_irl.sh rn_irl_staging.sh
