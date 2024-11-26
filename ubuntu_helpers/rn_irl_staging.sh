@@ -31,7 +31,10 @@ sed -i -e 's/port = 443/port = 8501/g' /etc/rn_irl_staging/bin/rn_irl/.streamlit
 chown root:rn_irl -R /etc/rn_irl_staging
 
 # Create symlink
+chomd ug+x /etc/rn_irl_staging/bin/rn_irl/ubuntu_helpers/rn_irl_staging_env.sh
+chomd ug+x /etc/rn_irl_staging/bin/rn_irl/ubuntu_helpers/rn_irl_staging2prod.sh
 ln -sf /etc/rn_irl_staging/bin/rn_irl/ubuntu_helpers/rn_irl_staging_env.sh /bin/rn_irl_staging
+
 # Copy service
 cp /etc/rn_irl_staging/bin/rn_irl/ubuntu_helpers/rn_irl_staging.service /lib/systemd/system
 
