@@ -5,7 +5,7 @@ service rn_irl_staging stop
 
 # Change all paths in the staging environment to the production environment path.
 cd /etc/rn_irl_staging/
-sed -i -e 's/rn_irl_staging/rn_irl/g' pyenv.cfg
+sed -i -e 's/rn_irl_staging/rn_irl/g' pyvenv.cfg
 
 cd /etc/rn_irl_staging/bin
 
@@ -18,7 +18,7 @@ do
 done
 
 # Overwrite port config - move back to port 443.
-sed -i -e 's/port = 8501/port = 443/g' /etc/rn_irl_staging/bin/rn_irl/.streamlig/config.toml
+sed -i -e 's/port = 8501/port = 443/g' /etc/rn_irl_staging/bin/rn_irl/.streamlit/config.toml
 
 # Shut down production enviorment.
 service rn_irl stop
