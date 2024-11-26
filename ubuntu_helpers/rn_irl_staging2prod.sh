@@ -1,9 +1,12 @@
 #!/bin/bash
 
 # Shut down staging service.
+echo "Shutting down staging environment..."
 service rn_irl_staging stop
 
 # Change all paths in the staging environment to the production environment path.
+echo "Modyfying paths..."
+
 cd /etc/rn_irl_staging/
 sed -i -e 's/rn_irl_staging/rn_irl/g' pyvenv.cfg
 
@@ -21,17 +24,20 @@ done
 sed -i -e 's/port = 8501/port = 443/g' /etc/rn_irl_staging/bin/rn_irl/.streamlit/config.toml
 
 # Shut down production enviorment.
+echo "Stopping current production environment..."
 service rn_irl stop
 
 # Back up current production environment.
+echo "Backing up current production environment..."
 DATE=$(date -I)
 mv /etc/rn_irl /etc/rn_irl_$DATE
 
 # Move staging enviroment path to production.
+echo "Moving staging environment into production..."
 mv /etc/rn_irl_staging /etc/rn_irl
-cp /etc/rn_irl_$DATE/bin/rn_irl/ubuntu_helpers/rn_irl.sh /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl.sh
 
 # Restart production environment.
+echo "Starting new production environment..."
 service rn_irl start
 
 # Remove staging symlink.
