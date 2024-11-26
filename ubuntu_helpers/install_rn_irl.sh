@@ -37,7 +37,7 @@ sed -i -e 's#db_path = sqlite:////irl.sdb#db_path = sqlite:////var//lib//rn_irl/
 
 # Create symlink for executable
 chmod ug+x /etc/rn_irl/bin/rn_irl/ubuntu_helpers/*.sh
-ln -s /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl.sh /bin/rn_irl
+ln -sf /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl.sh /bin/rn_irl
 
 # Copy service
 cp /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl.service /lib/systemd/system/
