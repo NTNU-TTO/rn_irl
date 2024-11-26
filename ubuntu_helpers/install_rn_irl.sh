@@ -3,6 +3,7 @@
 # Install some basics.
 apt install sqlite3
 apt install python3-venv
+apt install python-is-python3
 
 # Set up a common rn_irl group for users.
 groupadd -g 99 rn_irl
