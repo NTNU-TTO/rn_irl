@@ -6,7 +6,15 @@ textColor="#E5E8EE"
 font="sans serif"
 
 [server]
+headless = true
 enableStaticServing = true
+#port = 443
+#sslCertFile = '/path/to/certfile.crt'
+#sslKeyFile = '/path/to/keyfile.key'
 
 [browser]
+#serverAddress = "ttoirl.it.ntnu.no"
 gatherUsageStats = false
+
+[logger]
+level = "info"
