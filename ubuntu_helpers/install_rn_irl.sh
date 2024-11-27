@@ -38,8 +38,8 @@ sed -i -e "s#db_path = 'sqlite:///irl.sdb'#db_path = 'sqlite:////var//lib//rn_ir
 # Create symlink for executables
 chmod ug+x /etc/rn_irl/bin/rn_irl/ubuntu_helpers/*.sh
 ln -sf /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl.sh /bin/rn_irl
-ln -sf /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl_staging.sh /bin/rn_irl/rn_irl_staging.sh
-ln -sf /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl_staging2prod.sh /bin/rn_irl_staging2prod.sh
+ln -sf /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl_staging /bin/rn_irl/rn_irl_staging.sh
+ln -sf /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl_staging2prod /bin/rn_irl_staging2prod.sh
 
 # Copy service
 cp /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl.service /lib/systemd/system/
