@@ -45,8 +45,8 @@ about, play = st.tabs(['About', 'Play Around'])
 
 with about:
 
-    st.header("The KTH Innovation Readiness Level™ Model – General Comments")
-    st.markdown("* The KTH Innovation Readiness Level model is primarily applicable when you have a new idea (product/service/technology/concept/etc.) that you want to realize and take to the market.")
+    st.header("The KTH Innovation Readiness Level™ – General Comments")
+    st.markdown("* The KTH Innovation Readiness Level™ is primarily applicable when you have a new idea (product/service/technology/concept/etc.) that you want to realize and take to the market.")
     st.markdown("* The KTH IRL model measures and describes the progress in the development from an idea to a fully implemented innovation on the market. It does not measure the quality or potential of the idea.")
     st.markdown("* The KTH IRL model gives a snapshot of how far you have come in the development process. There is no valuation in being high or low on the scales, it just gives a more objective view of current status.")
     st.markdown("* It is common that you go both up and down (often several times) in the different scales during the development. This is typically due to: 1) actual progress or setbacks, and 2) new insights and understanding of the market, industry, etc. that makes you re-evaluate how far you have come.")
@@ -76,6 +76,12 @@ with about:
         else:
 
             st.image('static/KTH_logo_RGB.png', use_container_width="auto")
+
+        st.markdown("""<a style='display: block; text-align: center;'
+                    href="https://kthinnovationreadinesslevel.com/">
+                    KTH Innovation Readiness Level™</a>
+                    """,
+                    unsafe_allow_html=True)
 
     with c4:
 
