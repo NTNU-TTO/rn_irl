@@ -41,4 +41,4 @@ echo "Starting new production environment..."
 service rn_irl start
 
 # Remove staging symlink.
-rm /bin/rn_irl_staging
+rm /bin/rn_irl_staging_env
