@@ -34,7 +34,7 @@ chown root:rn_irl -R /etc/rn_irl_staging
 chomd ug+x /etc/rn_irl_staging/bin/rn_irl/ubuntu_helpers/rn_irl.sh
 chomd ug+x /etc/rn_irl_staging/bin/rn_irl/ubuntu_helpers/rn_irl_staging_env.sh
 chomd ug+x /etc/rn_irl_staging/bin/rn_irl/ubuntu_helpers/rn_irl_staging2prod.sh
-ln -sf /etc/rn_irl_staging/bin/rn_irl/ubuntu_helpers/rn_irl_staging_env.sh /bin/rn_irl_staging
+ln -sf /etc/rn_irl_staging/bin/rn_irl/ubuntu_helpers/rn_irl_staging_env.sh /bin/rn_irl_staging_env
 
 # Copy service
 cp /etc/rn_irl_staging/bin/rn_irl/ubuntu_helpers/rn_irl_staging.service /lib/systemd/system
