@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Update database if needed.
-HAS_COL=$(sqlite3 rn_irl/irl.sdb "select show_valuations from 'system settings';")
+HAS_COL=$(sqlite3 /var/lib/rn_irl/irl.sdb "select show_valuations from 'System Settings';")
 
 if [[ $HAS_COL == "0" ]] || [[ $HAS_COL == "1" ]]; then
         echo "RN IRL Database System Settings up to date, moving on..."
