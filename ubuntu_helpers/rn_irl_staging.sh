@@ -1,8 +1,9 @@
 #!/bin/bash
 
-if systemctl is-active --quite rn_irl_staging; then
+if systemctl is-active --quiet rn_irl_staging; then
         echo "Stopping running staging environment..."
         service rn_irl_staging stop:
+fi
 
 echo "Setting up virtual environment for python..."
 # Sets up a staging environment for testing bleeding edge RN IRL straight outta github.
