@@ -75,6 +75,7 @@ def on_save_system_settings():
     settings.logo_uri = ss.logo_uri
     settings.logo_uri_dark = ss.logo_uri_dark
     settings.logo_uri_light = ss.logo_uri_light
+    settings.show_valuations = int(ss.show_valuations)
     settings.update()
     edited_rows = ss.startup_value_matrix['edited_rows']
     base.update_startup_values(edited_rows)
@@ -329,16 +330,21 @@ def main():
         with sys_settings:
 
             sys_settings = base.get_system_settings()
-            cols = st.columns(3)
-            cols[0].text_input("Logo web page link",
-                               key='logo_uri',
-                               value=sys_settings.logo_uri)
-            cols[1].text_input("Dark mode logo URI",
-                               key="logo_uri_dark",
-                               value=sys_settings.logo_uri_dark)
-            cols[2].text_input("Light mode logo URI",
-                               key="logo_uri_light",
-                               value=sys_settings.logo_uri_light)
+            cols1 = st.columns(2)
+            cols1[0].text_input("Dark mode logo URI",
+                                key="logo_uri_dark",
+                                value=sys_settings.logo_uri_dark)
+            cols1[1].text_input("Light mode logo URI",
+                                key="logo_uri_light",
+                                value=sys_settings.logo_uri_light)
+
+            cols2 = st.columns(2, vertical_alignment="bottom")
+            cols2[0].text_input("Logo web page link",
+                                key='logo_uri',
+                                value=sys_settings.logo_uri)
+            cols2[1].checkbox("Show valuations",
+                              key="show_valuations",
+                              value=sys_settings.show_valuations)
             st.markdown("Startup Valuation Matrix")
             st.data_editor(base.get_irl_startup_value_matrix(),
                            use_container_width=True,
