@@ -103,9 +103,14 @@ def main():
 
             else:
 
-                ui.show_action_points(prefix, project, None)
+                exp = st.expander("Targets and Action Points")
 
-            if ss.user.org_id == ss.system_settings.owner_org_id:
+                with exp:
+
+                    ui.show_action_points(prefix, project, None)
+
+            if ss.system_settings.show_valuations and \
+               (ss.user.org_id == ss.system_settings.owner_org_id):
 
                 ui.display_valuation(project)
 
