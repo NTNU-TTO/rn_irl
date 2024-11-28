@@ -444,7 +444,6 @@ class SystemSettings(Base):
     force_email_users = Column(Integer)
     owner_org_id = mapped_column(ForeignKey('Organisations.org_id'))
     show_valuations = Column(Integer)
-    doesntexiststest = Column(Integer)
 
     def update(self):
 
