@@ -18,9 +18,6 @@ You should have received a copy of the GNU Affero General Public License
 along with Really Nice IRL. If not, see:
 <https://www.gnu.org/licenses/agpl-3.0.html>.
 """
-import warnings
-warnings.simplefilter(action='ignore', category=FutureWarning)
-
 import pandas as pd
 import streamlit as st
 import time
@@ -1408,6 +1405,7 @@ def edit_project_team(users, edit_cb, team_change_cb):
 
 def change_project_status(user):
 
+    st.subheader("Change project status")
     with st.form("change_project_status", border=False):
 
         de, re = st.columns(2)
@@ -1415,7 +1413,6 @@ def change_project_status(user):
 
         with de:
 
-            st.subheader("Change project status")
             active_projs = base.get_projects(user, filt, True)
             st.multiselect("Select projects to deactivate",
                            active_projs,
@@ -1424,7 +1421,6 @@ def change_project_status(user):
 
         with re:
 
-            st.subheader("Reactivate project(s):")
             inactive_projs = base.get_projects(user, filt, False)
             st.multiselect("Select projects to reactivate",
                            inactive_projs,

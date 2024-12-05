@@ -22,6 +22,7 @@ along with Really Nice IRL. If not, see:
 import streamlit as st
 import base
 import data_viz
+import time
 import ui
 import utils
 
@@ -30,10 +31,12 @@ from streamlit import session_state as ss
 
 @st.dialog("You have incomplete action points!")
 def override_dlg():
-    label = "Not all action points defined to increase the IRL are complete.  \n"
-    label += "What do you want to do with these action points?"
-    action = st.radio(label, ["Keep unfinished action points",
-                              "Discard all action points"])
+    ss.override_dlg_done = False
+    ss.keep_ass = None
+    lbl = "Not all action points defined to increase the IRL are complete.  \n"
+    lbl += "What do you want to do with these action points?"
+    action = st.radio(lbl, ["Keep unfinished action points",
+                            "Discard all action points"])
     cols = st.columns(2)
 
     with cols[0]:
@@ -41,6 +44,7 @@ def override_dlg():
         if st.button("Save assessment"):
 
             ss.keep_ass = (action == "Keep unfinished action points")
+            ss.override_dlg_done = True
             st.rerun()
 
     with cols[1]:
@@ -48,6 +52,7 @@ def override_dlg():
         if st.button("Cancel"):
 
             st.keep_ass = None
+            ss.override_dlg_done = True
             st.rerun()
 
 
@@ -199,8 +204,15 @@ def on_save_assessment():
     """
     Save updated assessment values to database.
     """
+    keep_ass = ss.get('keep_ass', None)
     irl_ass = ss.project
     old_ass_id = irl_ass.id
+
+    if keep_ass is None:
+
+        ss.save_ass_state = None
+
+        return
 
     # Update all values from UI values.
     irl_ass.crl = ss.crl
@@ -211,14 +223,24 @@ def on_save_assessment():
     irl_ass.frl = ss.frl
 
     # ...and save to database...
-    irl_ass.update()
+    error = irl_ass.update()
     ss.refresh = True
+    new_ass_id = base.get_irl_ass_id(ss.project.project_no)
 
-    if ss.keep_ass:
+    if keep_ass:
 
-        base.copy_aps(old_ass_id, irl_ass.id)
+        base.copy_aps(old_ass_id, new_ass_id)
 
     ss.keep_ass = None
+
+    if error is None:
+
+        ss.save_ass_state = 1
+
+    else:
+
+        ss.save_ass_state = 0
+        ss.save_ass_error = error
 
 
 def assessment_view(project, read_only=False):
@@ -293,7 +315,8 @@ def assessment_view(project, read_only=False):
 
         with plot:
 
-            header = "<h3 style='text-align: center;'>Innovation Readiness Level<br>%s</h3>"
+            header = "<h3 style='text-align: center;'>\
+                      KTH Innovation Readiness Level™<br>%s</h3>"
             st.markdown(header % project, unsafe_allow_html=True)
 
             if project is not None:
@@ -308,8 +331,16 @@ def assessment_view(project, read_only=False):
         with targets:
 
             # Target levels and notes.
+            ass_changed = base.irl_ass_changed(project)
+
             if read_only:
 
+                ui.show_action_points('ass', project, None)
+
+            elif ass_changed:
+
+                st.warning("You have unsaved assessment changes.\
+                           Please save these first.")
                 ui.show_action_points('ass', project, None)
 
             else:
@@ -318,11 +349,10 @@ def assessment_view(project, read_only=False):
                                       project,
                                       on_IRL_ap_changed)
 
-            ass_changed = base.irl_ass_changed(project)
-
             if not read_only:
 
                 read_only = not ass_changed
+
     # Set up all the descriptions and tables.
     with col2:
 
@@ -335,17 +365,38 @@ def assessment_view(project, read_only=False):
     if st.button("Save assessment", key='save_ass', disabled=read_only):
 
         # Check for incomplete action points.
-        ap_complete = base.ap_completed(project.id)
+        ap_complete = base.ap_completed(ss.project.id)
 
-        if not ap_complete:
+        if ap_complete:
+
+            ss.override_dlg_done = False
+            ss.keep_ass = False
+            on_save_assessment()
+
+        else:
 
             override_dlg()
 
-        keep_ass = ss.get("keep_ass", None)
+    odd = ss.get("override_dlg_done", False)
 
-        if ap_complete or keep_ass:
+    if odd:
 
-            on_save_assessment()
+        on_save_assessment()
+
+    state = ss.get("save_ass_state", None)
+
+    if state == 1:
+
+        st.success("Assessment saved!")
+        ss.save_ass_state = None
+        time.sleep(2)
+        st.rerun()
+
+    elif state == 0:
+
+        error = "There was a problem saving the assessment:\n  "
+        error += st.save_ass_error
+        st.error(error)
 
 
 def history_view(project):
@@ -401,7 +452,7 @@ def history_view(project):
 
         with col1:
 
-            header = "<h3 style='text-align: center;'>Innovation Readiness Level<br>%s</h3>"
+            header = "<h3 style='text-align: center;'>KTH Innovation Readiness Level™<br>%s</h3>"
             st.markdown(header % ss.project,
                         unsafe_allow_html=True)
 
@@ -480,7 +531,8 @@ def progress_view(project):
 
     with col1:
 
-        header = "<h3 style='text-align: center;'>Innovation Readiness Level<br>%s</h3>"
+        header = "<h3 style='text-align: center;'>\
+                 KTH Innovation Readiness Level™<br>%s</h3>"
         st.markdown(header % ss.project,
                     unsafe_allow_html=True)
 
@@ -498,8 +550,25 @@ def progress_view(project):
         ui.show_progress(r0, r1, None)
 
 
-def main():
+# Currently no sensible way to get theme information.
+# We assume dark as this is default until otherwise is proven by user.
+if ss.get('user_settings', None) is None:
 
+    dark_mode = True
+
+else:
+
+    dark_mode = ss.user_settings.dark_mode
+
+ui.add_logo(dark_mode)
+
+# If no user has logged in, force login, remember which page we came from.
+if ss.get('user', None) is None:
+
+    ss['go_to_page'] = 'pages/3_IRL_Assessment.py'
+    st.switch_page('pages/2_Login.py')
+
+else:
     user = ss.user
 
     # Disable all submissions if user is only allowed to read.
@@ -527,67 +596,46 @@ def main():
     if len(ss.projects) == 0:
 
         st.write("You currently do not have any projects. Lucky!")
-        return
-
-    st.sidebar.selectbox("Select project:",
-                         ss.projects,
-                         index=index,
-                         key='project',
-                         on_change=on_project_changed)
-
-    if ss.project is None:
-
-        project = ss.projects[index]
 
     else:
 
-        project = ss.project
+        st.sidebar.selectbox("Select project:",
+                             ss.projects,
+                             index=index,
+                             key='project',
+                             on_change=on_project_changed)
 
-    project_no = project.project_no
-    utils.get_project_history(project_no)
-    st.sidebar.radio("View",
-                     ["Assessment", "History", "Progress"],
-                     key="irl_view",
-                     index=0)
-    st.sidebar.divider()
+        if ss.project is None:
 
-    if ss.irl_view == 'Assessment':
+            project = ss.projects[index]
 
-        user_rights = ss.user.rights
-        project_rights = base.get_project_rights(project_no, ss.user.user_id)
-        read_only = (user_rights == 0) or (project_rights == 0)
-        assessment_view(project, read_only)
+        else:
 
-    elif ss.irl_view == 'History':
+            project = ss.project
 
-        history_view(project)
+        project_no = project.project_no
+        utils.get_project_history(project_no)
+        st.sidebar.radio("View",
+                         ["Assessment", "History", "Progress"],
+                         key="irl_view",
+                         index=0)
+        st.sidebar.divider()
 
-    elif ss.irl_view == 'Progress':
+        if ss.irl_view == 'Assessment':
 
-        progress_view(project)
+            user_rights = ss.user.rights
+            project_rights = base.get_project_rights(project_no, ss.user.user_id)
+            read_only = (user_rights == 0) or (project_rights == 0)
+            assessment_view(project, read_only)
+
+        elif ss.irl_view == 'History':
+
+            history_view(project)
+
+        elif ss.irl_view == 'Progress':
+
+            progress_view(project)
 
 
-if __name__ == '__main__':
 
-    ui.setup_page()
-    # Currently no sensible way to get theme information.
-    # We assume dark as this is default until otherwise is proven by user.
-    if ss.get('user_settings', None) is None:
 
-        dark_mode = True
-
-    else:
-
-        dark_mode = ss.user_settings.dark_mode
-
-    ui.add_logo(dark_mode)
-
-    # If no user has logged in, force login, remember which page we came from.
-    if ss.get('user', None) is None:
-
-        ss['go_to_page'] = 'pages/3_IRL_Assessment.py'
-        st.switch_page('pages/2_Login.py')
-
-    else:
-
-        main()

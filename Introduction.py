@@ -26,9 +26,6 @@ import ui
 
 from streamlit import session_state as ss
 
-
-# Set up page.
-ui.setup_page()
 # Currently no sensible way to get theme information.
 # We assume dark as this is default until otherwise is proven by user.
 if ss.get('user_settings', None) is None:

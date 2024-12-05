@@ -1,0 +1,87 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Dec  3 12:36:46 2024
+
+@author: Lodve
+"""
+import streamlit as st
+import ui
+
+from streamlit import session_state as ss
+
+intro_pg = st.Page("Introduction.py",
+                   title="Introduction to KTH IRL",
+                   icon=":material/info:")
+login_pg = st.Page("Login.py",
+                   title="Login",
+                   icon=":material/login:")
+logout_pg = st.Page("Login.py",
+                    title="Logout",
+                    icon=":material/login:")
+
+irl_ass_pg = st.Page("IRL_Assessment.py",
+                     title="Project Assessment",
+                     icon=":material/analytics:")
+port_pg = st.Page("Project_Portfolio.py",
+                  title="Project Portfolio",
+                  icon=":material/database:")
+project_tools_pg = st.Page("project_tools.py",
+                           title="Project Tools",
+                           icon=":material/construction:")
+admin_tools_pg = st.Page("admin_tools.py",
+                         title="Admin Tools",
+                         icon=":material/admin_panel_settings:")
+user_settings_pg = st.Page("user_settings.py",
+                           title="User Settings",
+                           icon=":material/manage_accounts:")
+sys_settings_pg = st.Page("sys_settings.py",
+                          title="System Settings",
+                          icon=":material/settings:")
+settings_pg = st.Page("Settings.py",
+                      title="Tools and Settings",
+                      icon=":material/settings:")
+
+
+def get_tools_n_settings(user):
+
+    if user.rights < 2:
+
+        return [user_settings_pg]
+
+    elif user.rights == 2:
+
+        return [project_tools_pg, user_settings_pg]
+
+    elif user.rights == 9:
+
+        return [project_tools_pg,
+                admin_tools_pg,
+                user_settings_pg,
+                sys_settings_pg]
+
+
+ss.status = ss.get("status", "unverified")
+
+if ss.status != 'verified':
+
+    pg = st.navigation(
+        {
+         "Account": [login_pg],
+         "About": [intro_pg]
+         }
+        )
+
+else:
+
+    user = ss.user
+    pg = st.navigation(
+        {
+         "Account": [logout_pg],
+         "Projects": [irl_ass_pg, port_pg],
+         "Tools & Settings": get_tools_n_settings(user),
+         "About": [intro_pg]
+         }
+        )
+
+ui.setup_page()
+pg.run()
