@@ -37,9 +37,6 @@ user_settings_pg = st.Page("user_settings.py",
 sys_settings_pg = st.Page("sys_settings.py",
                           title="System Settings",
                           icon=":material/settings:")
-settings_pg = st.Page("Settings.py",
-                      title="Tools and Settings",
-                      icon=":material/settings:")
 
 
 def get_tools_n_settings(user):
