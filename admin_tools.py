@@ -29,6 +29,7 @@ from streamlit import session_state as ss
 # Event handlers. #
 ###################
 
+
 def on_add_organisation():
     """
     Add organisations to the database.
@@ -89,7 +90,7 @@ user = ss.user
 ui.add_user()
 st.divider()
 
-ui.change_password(user)
+ui.change_password(user, True)
 
 st.divider()
 ui.change_user_status()
