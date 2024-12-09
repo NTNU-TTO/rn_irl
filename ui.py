@@ -778,11 +778,11 @@ def init_system():
         st.success("System successfully initialized!")
 
 
-def change_password(user):
+def change_password(user, admin=False):
 
     with st.form("change_password", border=False):
 
-        if user.rights == 9:
+        if admin:
 
             st.subheader("Change user password")
             cols = st.columns(4)
