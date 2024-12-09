@@ -19,6 +19,7 @@ along with Really Nice IRL. If not, see:
 <https://www.gnu.org/licenses/agpl-3.0.html>.
 """
 
+import streamlit as st
 from streamlit import session_state as ss
 
 import base
@@ -55,3 +56,5 @@ user = ss.user
 
 # The user settings.
 ui.user_settings(user_settings, on_save_user_settings)
+st.divider()
+ui.change_password(user)
