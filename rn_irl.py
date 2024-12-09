@@ -5,6 +5,8 @@ Created on Tue Dec  3 12:36:46 2024
 @author: Lodve
 """
 import streamlit as st
+
+import base
 import ui
 
 from streamlit import session_state as ss
@@ -57,28 +59,41 @@ def get_tools_n_settings(user):
                 sys_settings_pg]
 
 
-ss.status = ss.get("status", "unverified")
+owner_org_id = base.get_system_settings().owner_org_id
 
-if ss.status != 'verified':
+if owner_org_id is None:
 
-    pg = st.navigation(
-        {
-         "Account": [login_pg],
-         "About": [intro_pg]
-         }
-        )
+    st.subheader("It looks like you're running Really Nice IRL for the\
+                 very first time.")
+    st.write("Don't worry, I will help you set things up.  \n\
+             We just need to create an administrator and an owner\
+             organisation and we're good to go!")
+    ui.init_system()
 
 else:
 
-    user = ss.user
-    pg = st.navigation(
-        {
-         "Account": [logout_pg],
-         "Projects": [irl_ass_pg, port_pg],
-         "Tools & Settings": get_tools_n_settings(user),
-         "About": [intro_pg]
-         }
-        )
+    ss.status = ss.get("status", "unverified")
 
-ui.setup_page()
-pg.run()
+    if ss.status != 'verified':
+
+        pg = st.navigation(
+            {
+             "Account": [login_pg],
+             "About": [intro_pg]
+             }
+            )
+
+    else:
+
+        user = ss.user
+        pg = st.navigation(
+            {
+             "Account": [logout_pg],
+             "Projects": [irl_ass_pg, port_pg],
+             "Tools & Settings": get_tools_n_settings(user),
+             "About": [intro_pg]
+             }
+            )
+
+    ui.setup_page()
+    pg.run()
