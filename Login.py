@@ -148,7 +148,7 @@ def login_view():
                     user = base.get_user(username)
                     pw = utils.gen_pw()
                     success = base.change_user_password(user, pw)
-                    se = utils.send_mail(user, pw)
+                    se = utils.sendmail(user, pw)
 
                     if success and se:
 
