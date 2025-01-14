@@ -444,6 +444,8 @@ class SystemSettings(Base):
     force_email_users = Column(Integer)
     owner_org_id = mapped_column(ForeignKey('Organisations.org_id'))
     show_valuations = Column(Integer)
+    noreply_address = Column(Text)
+    noreply_body = Column(Text)
 
     def update(self):
 
@@ -990,6 +992,66 @@ def get_user_id(username):
     return user_id
 
 
+def has_password(username):
+    """
+    Convenience method to check if a user has a password.
+    If password is not set, returns False.
+    Can be used to ask for a password on first time login.
+
+    Parameters
+    ----------
+    username : str
+        Username provided from the UI.
+
+    Returns
+    -------
+    has_pw : Bool
+        True if user has a password, False else.
+
+    """
+    engine = create_engine(st.secrets.db_details.db_path)
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    user = session.query(User).filter(User.username == username).first()
+    has_pw = (user.password is not None)
+
+    session.close()
+    engine.dispose()
+
+    return has_pw
+
+
+def is_user(username):
+    """
+    Convenience method to check if a user exists.
+
+    Parameters
+    ----------
+    username : str
+        Username provided from the UI.
+
+    Returns
+    -------
+    has_pw : Bool
+        True if user exists, False else.
+
+    """
+    engine = create_engine(st.secrets.db_details.db_path)
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    user = session.query(User).filter(User.username == username).first()
+    is_user = user is not None
+
+    session.close()
+    engine.dispose()
+
+    return is_user
+
+
 def validate_user(user, password):
     """
 
@@ -1068,6 +1130,47 @@ def change_user_password(user, password):
     session.close()
     engine.dispose()
 
+    return success
+
+
+def change_user_rights(user, rights):
+    """
+    Change user permission level.
+
+    Parameters
+    ----------
+    user : User
+        DESCRIPTION.
+    rights : Integer
+        0-9.
+
+    Returns
+    -------
+    success : Bool
+        True if update was successful, False otherwise.
+
+    """
+
+    engine = create_engine(st.secrets.db_details.db_path)
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    stmt = (update(User).where(
+        User.user_id == user.user_id).values(rights=rights.level))
+
+    try:
+
+        session.execute(stmt)
+        success = True
+
+    except BaseException:
+
+        success = False
+
+    session.commit()
+    session.close()
+    engine.dispose()
     return success
 
 
