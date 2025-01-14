@@ -47,6 +47,16 @@ def on_save_user_settings():
     ss.refresh = True
 
 
+if ss.get('user_settings', None) is None:
+
+    dark_mode = True
+
+else:
+
+    dark_mode = ss.user_settings.dark_mode
+
+ui.add_logo(dark_mode)
+
 if ss.get("pm_map", None) is None:
 
     ss.pm_map = base.get_permission_level_map()
