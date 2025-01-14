@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+i# -*- coding: utf-8 -*-
 """
 Copyright (c) Lodve Berre and NTNU Technology Transfer AS 2024.
 
@@ -148,7 +148,7 @@ def login_view():
                     user = base.get_user(username)
                     pw = utils.gen_pw()
                     success = base.change_user_password(user, pw)
-                    se = utils.sendmail(user, pw)
+                    se = utils.sendmail(username, pw)
 
                     if success and se:
 
