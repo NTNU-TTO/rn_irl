@@ -21,6 +21,7 @@ along with Really Nice IRL. If not, see:
 
 import streamlit as st
 import base
+import ui
 
 from streamlit import session_state as ss
 
@@ -52,6 +53,15 @@ def on_save_system_settings():
 #
 # The actual UI.
 #
+if ss.get('user_settings', None) is None:
+
+    dark_mode = True
+
+else:
+
+    dark_mode = ss.user_settings.dark_mode
+
+ui.add_logo(dark_mode)
 
 sys_settings = base.get_system_settings()
 cols1 = st.columns(3)
