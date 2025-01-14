@@ -85,6 +85,16 @@ def on_add_departments():
 
     ss.new_deps = None
 
+# The action starts here.
+if ss.get('user_settings', None) is None:
+
+    dark_mode = True
+
+else:
+
+    dark_mode = ss.user_settings.dark_mode
+
+ui.add_logo(dark_mode)
 
 user = ss.user
 ui.add_user()
