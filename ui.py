@@ -62,7 +62,7 @@ tmrl_desc = base.get_irl_table('TMRL')[['Level', 'Aspects']]
 frl_desc = base.get_irl_table('FRL')[['Level', 'Aspects']]
 
 
-def on_init_system():
+def on_init_system(go_to_page):
     """
     Initialise essential system settings and add first user on first run.
     TODO: Should probably add some checks on orgs etc _but_ on the other hand,
@@ -122,7 +122,7 @@ def on_init_system():
         ss.user_settings = base.get_user_settings(user.user_id)
         ss.dark_mode = ss.user_settings.dark_mode
         ss.projects = base.get_projects(user, ss.user_settings.filter_on_user)
-        ss['go_to_page'] = 'pages/5_Settings.py'
+        ss['go_to_page'] = go_to_page
         ss.refresh = False
 
     else:
@@ -712,7 +712,7 @@ def add_user():
         st.error("User already exists!")
 
 
-def init_system():
+def init_system(go_to_page):
 
     btn_text = "Initialise system and get started!"
     sys_settings = base.get_system_settings()
@@ -767,7 +767,7 @@ def init_system():
                       key="logo_uri_light",
                       value=sys_settings.logo_uri_light)
 
-    st.button(btn_text, on_click=on_init_system)
+    st.button(btn_text, on_click=on_init_system, args=[go_to_page])
 
     if status == 0:
 
@@ -854,6 +854,74 @@ def change_password(user, admin=False):
             else:
 
                 st.error("New passwords don't match!")
+
+
+def change_user_rights():
+
+    st.subheader("Change user rights")
+    cols = st.columns(3)
+
+    with cols[0]:
+
+        active_users = base.get_users()
+        st.selectbox("Select user to change permission level for",
+                     active_users,
+                     placeholder="Select user",
+                     key="change_user_rights")
+
+    old_user = ss.get("change_user_rights", None)
+
+    if old_user is None:
+
+        rights = 0
+
+    else:
+
+        rights = old_user.rights
+
+    p_levels = base.get_permission_levels()
+    p_index = [p_level.level for p_level in p_levels]
+    index = p_index.index(rights)
+
+    with cols[1]:
+
+        st.selectbox("Old permission level",
+                     p_levels,
+                     index=index,
+                     disabled=True,
+                     key="old_permission_level")
+
+    with cols[2]:
+
+        st.selectbox("New permission level",
+                     p_levels,
+                     index=index,
+                     key="new_permission_level")
+
+    change_user_rights = st.button("Update user permissions")
+
+    if change_user_rights:
+
+        old_user = ss.get("change_user_rights", None)
+        rights = ss.get("new_permission_level", None)
+
+        if old_user is not None and rights is not None:
+
+            success = base.change_user_rights(old_user, rights)
+
+            if success:
+
+                st.success("User permission changed!")
+
+            else:
+
+                st.error("Could not change user permissions!")
+
+        with st.spinner("Updating database..."):
+
+            time.sleep(1)
+
+        st.rerun()
 
 
 def change_user_status():
