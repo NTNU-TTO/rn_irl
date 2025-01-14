@@ -39,7 +39,7 @@ def on_save_system_settings():
     settings.logo_uri = ss.logo_uri
     settings.logo_uri_dark = ss.logo_uri_dark
     settings.logo_uri_light = ss.logo_uri_light
-    settings.noreply_address = ss.no_reply_address
+    settings.noreply_address = ss.noreply_address
     settings.noreply_body = ss.noreply_body
     settings.show_valuations = int(ss.show_valuations)
     settings.update()
@@ -70,7 +70,7 @@ cols2[1].checkbox("Show valuations",
                   key="show_valuations",
                   value=sys_settings.show_valuations)
 
-cols3 = st.columns(2, vertical_alignment="bottom")
+cols3 = st.columns(2, vertical_alignment="top")
 cols3[0].text_input("noreply e-mail to use when e-mailing new users",
                     key="noreply_address",
                     value=sys_settings.noreply_address)
