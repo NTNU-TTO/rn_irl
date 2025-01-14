@@ -19,12 +19,15 @@ along with Really Nice IRL. If not, see:
 <https://www.gnu.org/licenses/agpl-3.0.html>.
 """
 
-import streamlit as st
 import pandas as pd
+import secrets
+import streamlit as st
+import string
 import base
 
 from datetime import datetime
 from streamlit import session_state as ss
+from subprocess import Popen, PIPE
 
 
 BACKEND = 'sqlite'
@@ -129,3 +132,40 @@ def get_project_team(user):
         }
 
     return project_team, column_config
+
+
+def gen_pw():
+
+    alphabet = string.ascii_letters + string.digits
+    password = ''.join(secrets.choice(alphabet) for i in range(8))
+
+    return password
+
+
+def sendmail(recipient, pw):
+    """
+    Convenience method to send a randomly generated password to a new user.
+    You are free to argue that this is an evil hack, but I couldn't be
+    bothered setting up the smtp server properly and this works, so there
+    you go. Feel free to fix this along with proper instructions on how to
+    set up the smptlib thingy properly...
+
+    Parameters
+    ----------
+    recipient : string
+        e-mail address (which is also the user name) of the new user.
+    pw : string
+        The automagically generated password now set in the database.
+
+    Returns
+    -------
+    None.
+
+    """
+    sys_settings = base.get_system_settings()
+    sender = sys_settings.noreply_address
+    subject = "Welcome to Really Nice IRL!"
+    body = sys_settings.noreply_body % pw
+    process = Popen(['mail', '-s', subject, '-r', sender, recipient],
+                    stdin=PIPE)
+    process.communicate(body.encode())
