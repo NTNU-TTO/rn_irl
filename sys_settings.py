@@ -39,6 +39,8 @@ def on_save_system_settings():
     settings.logo_uri = ss.logo_uri
     settings.logo_uri_dark = ss.logo_uri_dark
     settings.logo_uri_light = ss.logo_uri_light
+    settings.noreply_address = ss.no_reply_address
+    settings.noreply_body = ss.noreply_body
     settings.show_valuations = int(ss.show_valuations)
     settings.update()
     edited_rows = ss.startup_value_matrix['edited_rows']
@@ -52,7 +54,7 @@ def on_save_system_settings():
 #
 
 sys_settings = base.get_system_settings()
-cols1 = st.columns(2)
+cols1 = st.columns(3)
 cols1[0].text_input("Dark mode logo URI",
                     key="logo_uri_dark",
                     value=sys_settings.logo_uri_dark)
@@ -67,6 +69,14 @@ cols2[0].text_input("Logo web page link",
 cols2[1].checkbox("Show valuations",
                   key="show_valuations",
                   value=sys_settings.show_valuations)
+
+cols3 = st.columns(2, vertical_alignment="bottom")
+cols3[0].text_input("noreply e-mail to use when e-mailing new users",
+                    key="noreply_address",
+                    value=sys_settings.noreply_address)
+cols3[1].text_area("Welcome text to use in e-mail to new users",
+                   key="noreply_body",
+                   value=sys_settings.noreply_body)
 st.markdown("Startup Valuation Matrix")
 st.data_editor(base.get_irl_startup_value_matrix(),
                use_container_width=True,
