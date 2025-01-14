@@ -20,8 +20,9 @@ along with Really Nice IRL. If not, see:
 """
 
 import base
-import ui
 import streamlit as st
+import ui
+import utils
 
 from streamlit import session_state as ss
 
@@ -52,6 +53,19 @@ def onLogout():
     ss.projects = None
     ss.add_new_user_status = None
     ss.refresh = True
+
+
+def onSetPassword():
+
+    if ss.pw1 != ss.pw2:
+
+        ss.status = "no_match"
+
+    else:
+
+        username = ss.username
+        user = base.get_user(username)
+        base.change_user_password(user, ss.pw1)
 
 
 def checkPwd():
@@ -111,10 +125,41 @@ def login_view():
 
         st.text_input("Username:",
                       key="username")
-        st.text_input("Password:",
-                      key="password",
-                      type='password',
-                      on_change=checkPwd)
+        username = ss.get("username", None)
+        go_ahead = True
+
+        if username != "":
+
+            exists = base.is_user(username)
+
+            if exists:
+
+                has_pw = base.has_password(username)
+
+                if not has_pw:
+
+                    go_ahead = False
+                    welcome_str = "Looks like you are logging in for the \
+                    first time! I've generated a random password for you \
+                    and forwarded it to your e-mail address. Please check \
+                    your inbox and spam folder. I recommend that you change \
+                    the automagically generated password when you log in."
+                    st.write(welcome_str)
+                    user = base.get_user(username)
+                    pw = utils.gen_pw()
+                    success = base.change_user_password(user, pw)
+                    se = utils.send_mail(user, pw)
+
+                    if success and se:
+
+                        st.success("Password set and e-mail sent!")
+
+        if go_ahead:
+
+            st.text_input("Password:",
+                          key="password",
+                          type='password',
+                          on_change=checkPwd)
 
         if ss.status == 'unverified':
 
