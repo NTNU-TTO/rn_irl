@@ -89,13 +89,14 @@ def on_add_departments():
 user = ss.user
 ui.add_user()
 st.divider()
-
 ui.change_password(user, True)
-
+st.divider()
+ui.change_user_rights()
 st.divider()
 ui.change_user_status()
-
 st.divider()
 ui.add_organisation(on_add_organisation)
+st.divider()
 ui.add_faculties(on_add_faculties)
+st.divider()
 ui.add_departments(on_add_departments)
