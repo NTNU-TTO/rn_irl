@@ -830,7 +830,7 @@ def change_password(user, admin=False):
 
                 if verified:
 
-                    if user.rights == 9:
+                    if admin:
 
                         pw_user = base.get_user(username)
                         success = base.change_user_password(pw_user, pw1)
