@@ -1,4 +1,4 @@
-i# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 Copyright (c) Lodve Berre and NTNU Technology Transfer AS 2024.
 
