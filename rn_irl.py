@@ -51,6 +51,10 @@ def get_tools_n_settings(user):
 
         return [project_tools_pg, user_settings_pg]
 
+    elif user.rights == 8:
+
+        return [project_tools_pg, user_settings_pg]
+  
     elif user.rights == 9:
 
         return [project_tools_pg,
