@@ -1382,42 +1382,63 @@ def get_projects(user, filt=True, active=True):
     session = Session()
     active = int(active)
 
-    if filt:
+    irl_data = session.query(IRLAssessment).order_by(
+        func.max(IRLAssessment.assessment_date)).group_by(
+            IRLAssessment.project_no).where(
+                IRLAssessment.active == active).all()
+
+    filt_irl_data = []
+
+    if user.rights == 9 and filt is True:
+
+        for project in irl_data:
+
+            if project.project_leader_id == user.user_id:
+
+                filt_irl_data.append(project)
+
+        irl_data = filt_irl_data
+
+    elif user.rights == 8:
+
+        users = get_users(True, org_id=user.org_id)
+        user_ids = [user.user_id for user in users]
+
+        for project in irl_data:
+
+            if filt:
+
+                if project.project_leader_id == user.user_id:
+
+                    filt_irl_data.append(project)
+
+            else:
+
+                if project.project_leader_id in user_ids:
+
+                    filt_irl_data.append(project)
+
+        irl_data = filt_irl_data
+
+    elif user.rights <= 3:
 
         irl_data = session.query(IRLAssessment).order_by(
             func.max(IRLAssessment.assessment_date)).group_by(
                 IRLAssessment.project_no).filter(
-                    (IRLAssessment.project_leader_id == user.user_id) &
+                    (ProjectTeam.user_id == user.user_id) &
+                    (ProjectTeam.active == 1) &
+                    (IRLAssessment.project_no == ProjectTeam.project_id) &
                     (IRLAssessment.active == active)).all()
 
-    else:
+        if filt:
 
-        if user.rights == 9:
+            for project in irl_data:
 
-            irl_data = session.query(IRLAssessment).order_by(
-                func.max(IRLAssessment.assessment_date)).group_by(
-                    IRLAssessment.project_no).where(
-                        IRLAssessment.active == active).all()
+                if project.project_leader_id == user.user_id:
 
-        elif user.rights == 8:
+                    filt_irl_data.append(project)
 
-            users = get_users(True, org_id=user.org_id)
-            user_ids = [user.user_id for user in users]
-            irl_data = session.query(IRLAssessment).order_by(
-                func.max(IRLAssessment.assessment_date)).group_by(
-                    IRLAssessment.project_no).filter(
-                        (IRLAssessment.project_leader_id.in_(user_ids) &
-                            (IRLAssessment.active == active))).all()
-
-        elif user.rights <= 3:
-
-            irl_data = session.query(IRLAssessment).order_by(
-                func.max(IRLAssessment.assessment_date)).group_by(
-                    IRLAssessment.project_no).filter(
-                        (ProjectTeam.user_id == user.user_id) &
-                        (ProjectTeam.active == 1) &
-                        (IRLAssessment.project_no == ProjectTeam.project_id) &
-                        (IRLAssessment.active == active)).all()
+            irl_data = filt_irl_data
 
     session.close()
     engine.dispose()
