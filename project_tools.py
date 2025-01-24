@@ -144,7 +144,7 @@ def on_apply_project_team_changes():
     if new_pl is not None:
 
         ss.project_team_to_edit.project_leader_id = new_pl.user_id
-        ss.project_team_to_edit.update()
+        ss.project_team_to_edit.update(True)
 
     team_changes = ss.project_team_editor['edited_rows']
 
