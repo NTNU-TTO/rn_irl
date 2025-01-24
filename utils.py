@@ -96,14 +96,14 @@ def get_IRL_data(user):
     # Fetch from database only when and if we need to do so.
     if refresh:
 
-        filt = ss.user_settings.filter_on_user
+        filt = bool(ss.user_settings.filter_on_user)
         ss.projects = base.get_projects(user, filt)
         ss.refresh = False
 
 
 def get_project_history(project_id):
 
-    irl_data = base.get_project_history(project_id)
+    irl_data = boolbase.get_project_history(project_id)
     ss.project_history = irl_data
 
 
