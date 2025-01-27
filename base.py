@@ -38,6 +38,9 @@ Base = declarative_base()
 rights_map = {"Read Only": 0,
               "Read/Write": 1,
               "Read/Write/Create": 2,
+              "Head of Department":, 6,
+              "Dean":, 7,
+              "Superuser": 8,
               "Administrator": 9}
 
 
