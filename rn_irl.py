@@ -50,7 +50,15 @@ def get_tools_n_settings(user):
     elif user.rights == 2:
 
         return [project_tools_pg, user_settings_pg]
+    
+    elif user.rights == 6:
 
+        return [user_settings_pg]
+
+    elif user.rights == 7:
+
+        return [user_settings_pg]
+  
     elif user.rights == 8:
 
         return [project_tools_pg, user_settings_pg]
