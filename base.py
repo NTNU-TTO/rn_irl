@@ -1425,21 +1425,25 @@ def get_projects(user, filt=True, active=True):
         users = get_users(True, org_id=user.org_id, fac_id=user.fac_id, dep_id=user.dep_id)
         user_ids = [user.user_id for user in users]
 
-        for project in irl_data:
+        if filt:
 
-            if filt:
+            irl_data = session.query(IRLAssessment).order_by(
+                    func.max(IRLAssessment.assessment_date)).group_by(
+                        IRLAssessment.project_no).filter(
+                            (ProjectTeam.user_id == user.user_id) &
+                            (ProjectTeam.active == 1) &
+                            (IRLAssessment.project_no == ProjectTeam.project_id) &
+                            (IRLAssessment.active == active)).all()
 
-                if project.project_leader_id == user.user_id:
+        else:
 
-                    filt_irl_data.append(project)
-
-            else:
-
-                if project.project_leader_id in user_ids:
-
-                    filt_irl_data.append(project)
-
-        irl_data = filt_irl_data
+            irl_data = session.query(IRLAssessment).order_by(
+                    func.max(IRLAssessment.assessment_date)).group_by(
+                        IRLAssessment.project_no).filter(
+                            (ProjectTeam.user_id.in_(user_ids)) &
+                            (ProjectTeam.active == 1) &
+                            (IRLAssessment.project_no == ProjectTeam.project_id) &
+                            (IRLAssessment.active == active)).all()
 
     # Dean. Can view everything from own faculty.
     elif user.rights == 7:
@@ -1447,21 +1451,25 @@ def get_projects(user, filt=True, active=True):
         users = get_users(True, org_id=user.org_id, fac_id=user.fac_id)
         user_ids = [user.user_id for user in users]
 
-        for project in irl_data:
+        if filt:
 
-            if filt:
+            irl_data = session.query(IRLAssessment).order_by(
+                    func.max(IRLAssessment.assessment_date)).group_by(
+                        IRLAssessment.project_no).filter(
+                            (ProjectTeam.user_id == user.user_id) &
+                            (ProjectTeam.active == 1) &
+                            (IRLAssessment.project_no == ProjectTeam.project_id) &
+                            (IRLAssessment.active == active)).all()
 
-                if project.project_leader_id == user.user_id:
+        else:
 
-                    filt_irl_data.append(project)
-
-            else:
-
-                if project.project_leader_id in user_ids:
-
-                    filt_irl_data.append(project)
-
-        irl_data = filt_irl_data
+            irl_data = session.query(IRLAssessment).order_by(
+                    func.max(IRLAssessment.assessment_date)).group_by(
+                        IRLAssessment.project_no).filter(
+                            (ProjectTeam.user_id.in_(user_ids)) &
+                            (ProjectTeam.active == 1) &
+                            (IRLAssessment.project_no == ProjectTeam.project_id) &
+                            (IRLAssessment.active == active)).all()
 
     # Superuser. Can view everything from own organisation.
     elif user.rights == 8:
