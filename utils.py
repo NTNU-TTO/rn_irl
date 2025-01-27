@@ -103,7 +103,7 @@ def get_IRL_data(user):
 
 def get_project_history(project_id):
 
-    irl_data = boolbase.get_project_history(project_id)
+    irl_data = bool(base.get_project_history(project_id))
     ss.project_history = irl_data
 
 
