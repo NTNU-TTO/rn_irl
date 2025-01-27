@@ -468,15 +468,15 @@ def plot_irl_progress(irl0, irl1, smooth=False, dark_mode=True):
 
     else:
 
-        irl0 = patches.Polygon(np.asarray([x0s, y0s]).T, fill=False)
-        irl0.set_edge_color(IRL_CMAP(irl0_mean))
-        irl0.set_face_color(IRL_CMAP(irl0_mean))
-        irl0.set_color(IRL_CMAP(irl0_mean))
+        irl0 = patches.Polygon(np.asarray([x0s, y0s]).T,
+                               facecolor=IRL_CMAP(irl0_mean),
+                               edgecolor='black',
+                               linestyle='--',
+                               alpha=0.666)
         irl1 = patches.Polygon(np.asarray([x1s, y1s]).T,
-                               fill=False,
-                               ec=(1, 0, 1, 0.5),
-                               fc=(1, 0, 1, 0.5),
-                               color=(1, 0, 1, 0.5))
+                               facecolor=IRL_CMAP(irl1_mean),
+                               edgecolor='black',
+                               alpha=0.666)
 
     ax.add_patch(irl1)
     ax.add_patch(irl0)
