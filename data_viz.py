@@ -236,14 +236,7 @@ def plot_irl(irl_data, smooth=False, dark_mode=True, targets=False):
     else:
 
         irl = patches.Polygon(np.asarray([xs, ys]).T, fill=False)
-        irl_t = patches.Polygon(np.asarray([xts, yts]).T,
-                                fill=False,
-                                ec=(1, 0, 1, 0.5),
-                                fc=(1, 0, 1, 0.5),
-                                color=(1, 0, 1, 0.5))
-        irl_t.set_edge_color('w')
-        irl_t.set_face_color('w')
-        irl_t.set_color('w')
+        irl_t = patches.Polygon(np.asarray([xts, yts]).T, fill=False)
 
     if irl_data.plot_targets or targets:
 
