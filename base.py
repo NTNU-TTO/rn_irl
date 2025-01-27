@@ -918,7 +918,7 @@ def add_user(new_user, password):
         return new_user
 
 
-def get_users(active=True, org_id=None):
+def get_users(active=True, org_id=None, fac_id=None, dep_id=None):
     """
     Fetch a list of users from the database.
 
@@ -948,10 +948,27 @@ def get_users(active=True, org_id=None):
 
     else:
 
-        users = session.query(User).filter(
-            (User.active == active) &
-            (User.org_id == org_id)).all()
+        if fac_id is None and dep_id is None:
+        
+            users = session.query(User).filter(
+                (User.active == active) &
+                (User.org_id == org_id)).all()
 
+        elif dep_id is None:
+
+            users = session.query(User).filter(
+                (User.active == active) &
+                (User.org_id == org_id) &
+                (User.fac_id == fac_id)).all()
+
+        else:
+
+            users = session.query(User).filter(
+                (User.active == active) &
+                (User.org_id == org_id) &
+                (User.fac_id == fac_id) &
+                (User.dep_id == dep_id)).all()
+ 
     session.close()
     engine.dispose()
 
@@ -1399,6 +1416,51 @@ def get_projects(user, filt=True, active=True):
 
         irl_data = filt_irl_data
 
+    # Head of department. Can view everything from own department.
+    elif user.rights == 6:
+
+        users = get_users(True, org_id=user.org_id, fac_id=user.fac_id, dep_id=user.dep_id)
+        user_ids = [user.user_id for user in users]
+
+        for project in irl_data:
+
+            if filt:
+
+                if project.project_leader_id == user.user_id:
+
+                    filt_irl_data.append(project)
+
+            else:
+
+                if project.project_leader_id in user_ids:
+
+                    filt_irl_data.append(project)
+
+        irl_data = filt_irl_data
+
+    # Dean. Can view everything from own faculty.
+    elif user.rights == 7:
+
+        users = get_users(True, org_id=user.org_id, fac_id=user.fac_id)
+        user_ids = [user.user_id for user in users]
+
+        for project in irl_data:
+
+            if filt:
+
+                if project.project_leader_id == user.user_id:
+
+                    filt_irl_data.append(project)
+
+            else:
+
+                if project.project_leader_id in user_ids:
+
+                    filt_irl_data.append(project)
+
+        irl_data = filt_irl_data
+
+    # Superuser. Can view everything from own organisation.
     elif user.rights == 8:
 
         users = get_users(True, org_id=user.org_id)
