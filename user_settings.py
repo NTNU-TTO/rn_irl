@@ -43,19 +43,10 @@ def on_save_user_settings():
     settings.ascending_irl = int(ss.ascending_irl)
     settings.dark_mode = int(ss.dark_mode)
     settings.ap_table_view = int(ss.ap_table_view)
-    settings.update()
-    ss.refresh = True
+    success = settings.update()
+    ss.refresh = success
+    return success
 
-
-if ss.get('user_settings', None) is None:
-
-    dark_mode = True
-
-else:
-
-    dark_mode = ss.user_settings.dark_mode
-
-ui.add_logo(dark_mode)
 
 if ss.get("pm_map", None) is None:
 
