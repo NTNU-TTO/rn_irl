@@ -830,7 +830,7 @@ def change_password(user, admin=False):
 
                 if verified:
 
-                    if admin:
+                    if user.rights == 9:
 
                         pw_user = base.get_user(username)
                         success = base.change_user_password(pw_user, pw1)
@@ -1542,41 +1542,61 @@ def change_project_status(user):
 
 def user_settings(user_settings, handler):
 
-    st.checkbox("Dark mode for plots",
-                value=user_settings.dark_mode,
-                key='dark_mode',
-                help="Temporary workaround to display images and plots\
-                      according to the selected theme")
-    st.checkbox("Smooth IRL levels",
-                value=user_settings.smooth_irl,
-                key='smooth_irl',
-                help="When selected, smooths the curves between the\
-                      diffrent IRL values to give what some people\
-                      including the author thinks is more esthetically\
-                      pleasing look")
-    st.checkbox("Filter projects on active user",
-                value=user_settings.filter_on_user,
-                key='filter_on_user',
-                help="When selected, only projects where the active user\
-                      is project leader be visible in the user\
-                      interface.")
-    st.checkbox("Remember current project on next login",
-                value=user_settings.remember_project,
-                key='remember_project',
-                help="When selected, Really Nice IRL will remember the\
-                      current project upon the next login.")
-    st.checkbox("Display IRL in ascending order",
-                value=user_settings.ascending_irl,
-                key='ascending_irl',
-                help="When selected, will display IRL scales and aspects\
-                      in ascending (1-9) order, when deselected IRL \
-                      scales will be displayed in descending (9-1) order ")
-    st.checkbox("Table view for action points in Portfolio View",
-                value=user_settings.ap_table_view,
-                key='ap_table_view',
-                help="When selected, will display a table view of\
-                      targets, action points and lead instead of\
-                      a read-only version of the input widget\
-                      in portfolio mode")
-    st.button("Apply user settings",
-              on_click=handler)
+    with st.form("change_user_settings", border=False):
+
+        st.checkbox("Dark mode for plots",
+                    value=user_settings.dark_mode,
+                    key='dark_mode',
+                    help="Temporary workaround to display images and plots\
+                          according to the selected theme")
+        st.checkbox("Smooth IRL levels",
+                    value=user_settings.smooth_irl,
+                    key='smooth_irl',
+                    help="When selected, smooths the curves between the\
+                          diffrent IRL values to give what some people\
+                          including the author thinks is more esthetically\
+                          pleasing look")
+        st.checkbox("Filter projects on active user",
+                    value=user_settings.filter_on_user,
+                    key='filter_on_user',
+                    help="When selected, only projects where the active user\
+                          is project leader be visible in the user\
+                          interface.")
+        st.checkbox("Remember current project on next login",
+                    value=user_settings.remember_project,
+                    key='remember_project',
+                    help="When selected, Really Nice IRL will remember the\
+                          current project upon the next login.")
+        st.checkbox("Display IRL in ascending order",
+                    value=user_settings.ascending_irl,
+                    key='ascending_irl',
+                    help="When selected, will display IRL scales and aspects\
+                          in ascending (1-9) order, when deselected IRL \
+                          scales will be displayed in descending (9-1) order ")
+        st.checkbox("Table view for action points in Portfolio View",
+                    value=user_settings.ap_table_view,
+                    key='ap_table_view',
+                    help="When selected, will display a table view of\
+                          targets, action points and lead instead of\
+                          a read-only version of the input widget\
+                          in portfolio mode")
+        change_us_status = st.form_submit_button("Apply user settings")
+
+        if change_us_status:
+
+            success = handler()
+
+            if success:
+
+                st.success("User settings updated!")
+
+                with st.spinner("Updating database..."):
+
+                    time.sleep(1)
+
+            else:
+
+                st.error("Could not update user settings!")
+                time.sleep(1)
+
+            st.rerun()
