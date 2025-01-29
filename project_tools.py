@@ -132,19 +132,27 @@ def on_apply_project_team_changes():
     """
     project_no = ss.project_team_to_edit.project_no
     new_members = ss.add_new_project_members
+    errors = []
 
     # Add new project members.
-    # TODO: Add status variable on succes and failure.
     if len(new_members) > 0:
 
-        base.add_project_team(project_no, new_members)
+        error = base.add_project_team(project_no, new_members)
+
+        if error is not None:
+
+            errors.append(error)
 
     new_pl = ss.change_project_leader
 
     if new_pl is not None:
 
         ss.project_team_to_edit.project_leader_id = new_pl.user_id
-        ss.project_team_to_edit.update(True)
+        error = ss.project_team_to_edit.update(True)
+
+        if error is not None:
+
+            errors.append(error)
 
     team_changes = ss.project_team_editor['edited_rows']
 
@@ -162,9 +170,24 @@ def on_apply_project_team_changes():
 
             setattr(team_member, col, val)
 
-        team_member.update()
+        error = team_member.update()
+
+        if error is not None:
+
+            errors.append(error)
 
     ss.team_df = None
+
+    if len(errors) == 0:
+
+        return None
+
+    else:
+
+        errors = "\n".join(error for error in errors)
+
+        return errors
+
 
 # The action starts here.
 if ss.get('user_settings', None) is None:

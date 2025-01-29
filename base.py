@@ -345,13 +345,14 @@ class IRLAssessment(Base, SerializerMixin):
         try:
 
             session.commit()
-            session.close()
-            engine.dispose()
 
         except BaseException:
 
             # tb = sys.exception().__traceback__
             error = "Could not save assessment to the database."
+
+        session.close()
+        engine.dispose()
 
         return error
 
@@ -544,17 +545,29 @@ class ProjectTeam(Base, SerializerMixin):
 
     def update(self):
 
+        errors = None
         engine = create_engine(st.secrets.db_details.db_path)
         Base.metadata.create_all(bind=engine)
         Session = sessionmaker()
         Session.configure(bind=engine)
         session = Session()
         uv = {'project_rights': self.project_rights, 'active': self.active}
-        session.query(ProjectTeam).filter(
+
+        try:
+
+            session.query(ProjectTeam).filter(
                ProjectTeam.id == self.id).update(uv)
-        session.commit()
+            session.commit()
+
+        except BaseException:
+
+            errors = "Could not update project team member with user id "
+            errors += f"{self.user_id}"
+
         session.close()
         engine.dispose()
+
+        return errors
 
     def __str__(self):
         return self.user.actual_name
@@ -1721,20 +1734,29 @@ def add_project_team(project_no, team):
     Session = sessionmaker()
     Session.configure(bind=engine)
     session = Session()
+    errors = None
 
-    for user in team:
+    try:
 
-        team_member = ProjectTeam()
-        team_member.project_id = project_no
-        team_member.user_id = user.user_id
-        team_member.project_rights = user.rights
-        team_member.active = 1
-        session.add(team_member)
+        for user in team:
 
-    session.commit()
+            team_member = ProjectTeam()
+            team_member.project_id = project_no
+            team_member.user_id = user.user_id
+            team_member.project_rights = user.rights
+            team_member.active = 1
+            session.add(team_member)
+
+        session.commit()
+
+    except BaseException:
+
+        errors = "Error adding new team members!"
 
     session.close()
     engine.dispose()
+
+    return errors
 
 
 """ Organisation, department and faculty methods."""

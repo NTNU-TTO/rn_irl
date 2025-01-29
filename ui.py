@@ -1430,45 +1430,66 @@ def edit_project_team(users, edit_cb, team_change_cb):
         allowed_perms = base.get_permission_levels(user)
         allowed_perms = [perm.level_text for perm in allowed_perms if
                          user.rights >= perm.level]
-        st.data_editor(team,
-                       column_order=['actual_name',
-                                     'username',
-                                     'access_level',
-                                     'active'],
-                       column_config={
-                           "actual_name": st.column_config.TextColumn(
-                               "Name",
-                               help="Project member name",
-                               width="medium",
-                               disabled=True,
-                               required=True),
-                           "username": st.column_config.TextColumn(
-                               "Username",
-                               help="Project member username",
-                               width="medium",
-                               disabled=True,
-                               required=True),
-                           "access_level": st.column_config.SelectboxColumn(
-                                "Access Level",
-                                help="Project member access level",
-                                width="medium",
-                                options=allowed_perms,
-                                disabled=False,
-                                required=True,
-                                ),
-                           "active": st.column_config.CheckboxColumn(
-                               "Active",
-                               help="Disable/enable project access",
-                               width="small",
-                               disabled=False,
-                               required=True,
-                               ),
-                           },
-                       use_container_width=True,
-                       hide_index=True,
-                       key="project_team_editor")
-        st.button("Apply project team changes",
-                  on_click=team_change_cb)
+
+        with st.form("update_team_data_editor", border=False):
+
+            st.data_editor(team,
+                           column_order=['actual_name',
+                                         'username',
+                                         'access_level',
+                                         'active'],
+                           column_config={
+                               "actual_name": st.column_config.TextColumn(
+                                   "Name",
+                                   help="Project member name",
+                                   width="medium",
+                                   disabled=True,
+                                   required=True),
+                               "username": st.column_config.TextColumn(
+                                   "Username",
+                                   help="Project member username",
+                                   width="medium",
+                                   disabled=True,
+                                   required=True),
+                               "access_level": st.column_config.SelectboxColumn(
+                                   "Access Level",
+                                   help="Project member access level",
+                                   width="medium",
+                                   options=allowed_perms,
+                                   disabled=False,
+                                   required=True,
+                                   ),
+                               "active": st.column_config.CheckboxColumn(
+                                   "Active",
+                                   help="Disable/enable project access",
+                                   width="small",
+                                   disabled=False,
+                                   required=True,
+                                   ),
+                               },
+                           use_container_width=True,
+                           hide_index=True,
+                           key="project_team_editor")
+            submit = st.form_submit_button("Apply project team changes")
+
+            if submit:
+
+                errors = team_change_cb()
+
+                if errors is None:
+
+                    st.success("Project team changes successfully saved!")
+
+                    with st.spinner("Updating database..."):
+
+                        time.sleep(1)
+
+                else:
+
+                    st.error(errors)
+                    time.sleep(1)
+
+                st.rerun()
 
 
 def change_project_status(user):
