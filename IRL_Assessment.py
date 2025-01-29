@@ -625,7 +625,7 @@ else:
 
             user_rights = ss.user.rights
             project_rights = base.get_project_rights(project_no, ss.user.user_id)
-            read_only = (user_rights in [0, 7, 8]) or (project_rights == 0)
+            read_only = (user_rights in [0, 6, 7]) or (project_rights == 0)
             assessment_view(project, read_only)
 
         elif ss.irl_view == 'History':
