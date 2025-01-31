@@ -1238,13 +1238,13 @@ def change_user_status(users, active):
     return success
 
 
-def get_user(username):
+def get_user(name_or_id):
     """
 
     Parameters
     ----------
-    username : string
-        Must be a valid username.
+    username : string or int
+        Must be a valid username or user id.
 
     Returns
     -------
@@ -1252,11 +1252,21 @@ def get_user(username):
         DESCRIPTION.
 
     """
+    assert type(name_or_id) in [str, int]
+
     engine = create_engine(st.secrets.db_details.db_path)
     Base.metadata.create_all(bind=engine)
     Session = sessionmaker(bind=engine)
     session = Session()
-    user = session.query(User).filter(User.username == username).first()
+
+    if type(name_or_id) is str:
+
+        user = session.query(User).filter(User.username == name_or_id).first()
+
+    else:
+
+        user = session.query(User).filter(User.user_id == name_or_id).first()
+
     session.close()
     engine.dispose()
 
