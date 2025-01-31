@@ -61,6 +61,53 @@ def history_formatter(revision):
     return revision.assessment_date
 
 
+def create_mom():
+    """
+    Creates Minutes of Meeting based on action points and comments.
+
+    Returns
+    -------
+    str
+    """
+    project = ss.project
+    project_id = ss.project.project_no
+    project_name = ss.project.project_name
+    ass_date = ss.project.assessment_date
+    mom = f"Minutes of Meeting {project_id} {project_name} {ass_date}\n\n"
+
+    for irl in ['CRL', 'TRL', 'BRL', 'IPRL', 'TMRL', 'FRL']:
+
+        no_notes = f"No specific notes agreed for {irl}"
+        irl_low = irl.lower()
+        target_level = getattr(project, f"{irl_low}_target")
+        mom += f"{irl} target level: {target_level}\n"
+        mom += f"{irl} notes:\n"
+        irl_notes = getattr(project, f"{irl_low}_notes")
+
+        if irl_notes is None:
+
+            irl_notes = no_notes
+
+        irl_notes += "\n"
+        mom += irl_notes
+        mom += f"{irl} Action Points:\n"
+        aps = base.get_action_points(project.id, irl)
+
+        for ap in aps.itertuples():
+
+            lead = base.get_user(ap.responsible)
+            dd = f"{ap.due_date}"[:10]
+            mom += f"* {ap.action_point}\n"
+            mom += f"\t- Responsible: {lead}\n"
+            mom += f"\t- Due date: {dd}\n"
+
+        if len(aps) == 0:
+
+            mom += f"No specific action points agreed for {irl}.\n\n"
+
+    return mom
+
+
 def on_IRL_val_changed():
     """
     Callback used for all IRL Level sliders.
@@ -171,6 +218,7 @@ def on_IRL_ap_changed():
             ap.insert()
 
     ss.refresh = True
+    ss.mom = create_mom()
 
 
 def on_history_changed():
@@ -624,7 +672,8 @@ else:
         if ss.irl_view == 'Assessment':
 
             user_rights = ss.user.rights
-            project_rights = base.get_project_rights(project_no, ss.user.user_id)
+            project_rights = base.get_project_rights(project_no,
+                                                     ss.user.user_id)
             read_only = (user_rights in [0, 6, 7]) or (project_rights == 0)
             assessment_view(project, read_only)
 
@@ -635,7 +684,3 @@ else:
         elif ss.irl_view == 'Progress':
 
             progress_view(project)
-
-
-
-
