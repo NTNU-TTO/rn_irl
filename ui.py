@@ -372,6 +372,26 @@ def make_action_points(prefix, project_data, ap_cb, expanded=False):
         st.form_submit_button("Update action points",
                               on_click=ap_cb)
 
+        mom = ss.get("mom", None)
+
+        # TODO: Make this work.
+        if mom is not None:
+
+            team = ""
+            project_team = base.get_project_team(ss.project.id)
+
+            for member in project_team.itertuples():
+
+                user = base.get_user(team.user_id)
+                email = user.username
+                team += email + ";"
+
+            st.write(team)
+            href = f'<a href="mailto:{team}'
+            href += '?subject=Minutes of Meeting'
+            href += '">Send Minutes of Meeting</a>'
+            st.markdown(href, unsafe_allow_html=True)
+
 
 def show_action_points(prefix, project_data, ap_cb, expanded=False):
 
