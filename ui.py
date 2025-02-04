@@ -731,7 +731,7 @@ def add_user():
         st.error("User already exists!")
 
 
-def init_system(go_to_page):
+def init_system():
 
     btn_text = "Initialise system and get started!"
     sys_settings = base.get_system_settings()
@@ -786,7 +786,7 @@ def init_system(go_to_page):
                       key="logo_uri_light",
                       value=sys_settings.logo_uri_light)
 
-    st.button(btn_text, on_click=on_init_system, args=[go_to_page])
+    st.button(btn_text, on_click=on_init_system)
 
     if status == 0:
 
