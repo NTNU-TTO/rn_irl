@@ -62,7 +62,7 @@ tmrl_desc = base.get_irl_table('TMRL')[['Level', 'Aspects']]
 frl_desc = base.get_irl_table('FRL')[['Level', 'Aspects']]
 
 
-def on_init_system(go_to_page):
+def on_init_system():
     """
     Initialise essential system settings and add first user on first run.
     TODO: Should probably add some checks on orgs etc _but_ on the other hand,
@@ -122,7 +122,6 @@ def on_init_system(go_to_page):
         ss.user_settings = base.get_user_settings(user.user_id)
         ss.dark_mode = ss.user_settings.dark_mode
         ss.projects = base.get_projects(user, ss.user_settings.filter_on_user)
-        ss['go_to_page'] = go_to_page
         ss.refresh = False
 
     else:
