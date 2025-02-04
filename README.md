@@ -46,7 +46,7 @@ mv /path/to/your/local/github/clone/rn_irl /etc/rn_irl/bin
 
 ## Make the database persistent outside of the rn_irl environment
 sudo mkdir /var/lib/rn_irl  
-sudo mv /etc/rn_irl/bin/rn_irl/irl.db /var/lib/rn_irl  
+sudo mv /etc/rn_irl/bin/rn_irl/irl.sdb /var/lib/rn_irl  
 
 ## Edit secrets.toml and update the path to the database:
 [db_details]  
