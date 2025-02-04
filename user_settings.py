@@ -54,6 +54,7 @@ if ss.get("pm_map", None) is None:
 
 user_settings = ss['user_settings']
 user = ss.user
+ui.add_logo(user_settings.dark_mode)
 
 # The user settings.
 ui.user_settings(user_settings, on_save_user_settings)
