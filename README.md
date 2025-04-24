@@ -14,12 +14,16 @@ Note that this is only tested on Ubuntu 24.04 LTS, so if you're running somethin
 
 # RN IRL Setup Guide
 
+## Make sure Ubuntu is up to date.
+sudo apt update
+sudo apt upgrade
+
 ## Install some basics.
 apt install sqlite3  
 apt install python3-venv  
 
 ## Create a group for users that need access to rn_irl folders without root access (this is optional, but probably good practice if you want to restrict root access):
-sudo groupadd -gid 99 rn_irl
+sudo groupadd --gid 99 rn_irl
 
 ## Get the source code - doesn't matter where you place it at this time.
 git clone https://github.com/NTNU-TTO/rn_irl  
