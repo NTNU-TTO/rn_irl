@@ -37,15 +37,15 @@ sudo python -m venv rn_irl
 sudo chown root:rn_irl -R rn_irl  
 
 ## Activate the virtual python environment.
-sudo source /etc/rn_irl/bin/activate  
+source /etc/rn_irl/bin/activate  
 
 ## Install required python modules.
-sudo pip install streamlit  
-sudo pip install bcrypt  
-sudo pip install numpy  
-sudo pip install scipy  
-sudo pip install matplotlib  
-sudo pip install sqlalchemy  
+pip install streamlit  
+pip install bcrypt  
+pip install numpy  
+pip install scipy  
+pip install matplotlib  
+pip install sqlalchemy  
 
 ## Move the source code inside the virtual python environment.
 sudo mv /path/to/your/local/github/clone/rn_irl /etc/rn_irl/bin  
