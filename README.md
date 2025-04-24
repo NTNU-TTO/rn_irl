@@ -19,8 +19,9 @@ sudo apt update
 sudo apt upgrade
 
 ## Install some basics.
-apt install sqlite3  
-apt install python3-venv  
+sudo apt install sqlite3  
+sudo apt install python3-venv  
+sudo apt install python-is-python3  
 
 ## Create a group for users that need access to rn_irl folders without root access (this is optional, but probably good practice if you want to restrict root access):
 sudo groupadd --gid 99 rn_irl
@@ -35,18 +36,18 @@ sudo python -m venv rn_irl
 sudo chown root:rn_irl -R rn_irl  
 
 ## Activate the virtual python environment.
-source /etc/rn_irl/bin/activate  
+sudo source /etc/rn_irl/bin/activate  
 
 ## Install required python modules.
-pip install streamlit  
-pip install bcrypt  
-pip install numpy  
-pip install scipy  
-pip install matplotlib  
-pip install sqlalchemy  
+sudo pip install streamlit  
+sudo pip install bcrypt  
+sudo pip install numpy  
+sudo pip install scipy  
+sudo pip install matplotlib  
+sudo pip install sqlalchemy  
 
 ## Move the source code inside the virtual python environment.
-mv /path/to/your/local/github/clone/rn_irl /etc/rn_irl/bin  
+sudo mv /path/to/your/local/github/clone/rn_irl /etc/rn_irl/bin  
 
 ## Make the database persistent outside of the rn_irl environment
 sudo mkdir /var/lib/rn_irl  
