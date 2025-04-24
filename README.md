@@ -21,7 +21,8 @@ sudo apt upgrade
 ## Install some basics.
 sudo apt install sqlite3  
 sudo apt install python3-venv  
-sudo apt install python-is-python3  
+sudo apt install python-is-python3 
+sudo apt install python3-pip  
 
 ## Create a group for users that need access to rn_irl folders without root access (this is optional, but probably good practice if you want to restrict root access):
 sudo groupadd --gid 99 rn_irl
