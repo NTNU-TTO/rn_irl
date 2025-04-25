@@ -15,8 +15,8 @@ Note that this is only tested on Ubuntu 24.04 LTS, so if you're running somethin
 # RN IRL Setup Guide
 
 ## Make sure Ubuntu is up to date.
-sudo apt update
-sudo apt upgrade
+sudo apt update  
+sudo apt upgrade  
 
 ## Install some basics.
 sudo apt install sqlite3  
