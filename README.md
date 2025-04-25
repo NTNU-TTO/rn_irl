@@ -37,6 +37,7 @@ sudo python -m venv rn_irl
 sudo chown root:rn_irl -R rn_irl  
 
 ## Activate the virtual python environment.
+sudo su root
 source /etc/rn_irl/bin/activate  
 
 ## Install required python modules.
@@ -48,26 +49,26 @@ pip install matplotlib
 pip install sqlalchemy  
 
 ## Move the source code inside the virtual python environment.
-sudo mv /path/to/your/local/github/clone/rn_irl /etc/rn_irl/bin  
+mv /path/to/your/local/github/clone/rn_irl /etc/rn_irl/bin  
 
 ## Make the database persistent outside of the rn_irl environment
-sudo mkdir /var/lib/rn_irl  
-sudo mv /etc/rn_irl/bin/rn_irl/irl.sdb /var/lib/rn_irl  
+mkdir /var/lib/rn_irl  
+mv /etc/rn_irl/bin/rn_irl/irl.sdb /var/lib/rn_irl  
 
-## Edit secrets.toml and update the path to the database:
+## Edit /etc/rn_irl/bin/rn_irl/.streamlit/secrets.toml and update the path to the database:
 [db_details]  
 db_path = 'sqlite:////var//lib//rn_irl//irl.sdb  
 
 ## Create symlink bash script:
-sudo ln -s /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl.sh /bin/rn_irl  
+ln -s /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl.sh /bin/rn_irl  
 
 ## Copy service
-sudo cp /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl.service /lib/systemd/system/  
+cp /etc/rn_irl/bin/rn_irl/ubuntu_helpers/rn_irl.service /lib/systemd/system/  
 
 ## Reload, enable and run service
-sudo systemctl daemon-reload  
-sudo systemctl enable rn_irl  
-sudo service rn_irl start  
+systemctl daemon-reload  
+systemctl enable rn_irl  
+service rn_irl start  
 
 ## Enjoy.
 
