@@ -19,7 +19,8 @@ sudo apt update
 sudo apt upgrade
 
 ## One-click install:
-sudo su bash <(curl -sL https://raw.githubusercontent.com/NTNU-TTO/rn_irl/refs/heads/main/ubuntu_helpers/install_rn_irl.sh)
+sudo su  
+bash <(curl -sL https://raw.githubusercontent.com/NTNU-TTO/rn_irl/refs/heads/main/ubuntu_helpers/install_rn_irl.sh)
 
 ## Manual install:
 This does the same as the script above.
