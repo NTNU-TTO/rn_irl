@@ -16,13 +16,18 @@ Note that this is only tested on Ubuntu 24.04 LTS, so if you're running somethin
 
 ## Make sure Ubuntu is up to date.
 sudo apt update  
-sudo apt upgrade  
+sudo apt upgrade
+
+## One-click install:
+sudo su bash <(curl -sL https://raw.githubusercontent.com/NTNU-TTO/rn_irl/refs/heads/main/ubuntu_helpers/install_rn_irl.sh)
+
+## Manual install:
+This does the same as the script above.
 
 ## Install some basics.
 sudo apt install sqlite3  
 sudo apt install python3-venv  
 sudo apt install python-is-python3 
-
 
 ## Create a group for users that need access to rn_irl folders without root access (this is optional, but probably good practice if you want to restrict root access):
 sudo groupadd --gid 99 rn_irl
