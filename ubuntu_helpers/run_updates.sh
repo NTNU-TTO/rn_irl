@@ -43,21 +43,22 @@ if [[ "$HAS_COL" == *"$ERROR"* ]]; then
         sqlite3 "$IRL_PROD_DB" 'ALTER TABLE "System Settings" ADD COLUMN irl_revision TEXT;'
         sqlite3 "$IRL_PROD_DB" 'UPDATE "System Settings" SET irl_revision = "Version F released 2025";'
         NEW_IRL=true
-else
-        REV=$(sqlite3 "$IRL_PROD_DB" 'SELECT irl_revision FROM "System Settings"')
+fi
 
-        if [[ "$REV" == "$IRL_REV" ]]; then
-            echo "RN IRL Database System Settings up to date, moving on..."
-        else
-            echo "Updating IRL definitions to latest revision..."
+REV=$(sqlite3 "$IRL_PROD_DB" 'SELECT irl_revision FROM "System Settings"')
+
+if [[ "$REV" != "$IRL_REV" && "$NEW_IRL" == "true" ]]; then
+
+    echo "Updating IRL definitions to latest revision..."
             sqlite3 /var/lib/rn_irl/irl.sdb <<EOF
 ATTACH DATABASE '$IRL_GIT_DB' AS newdb;
 DROP TABLE IF EXISTS IRL;
 CREATE TABLE IRL AS SELECT * FROM newdb.IRL;
 DETACH DATABASE newdb;
 EOF
-            echo "IRL table updated successfully."
-        fi
+    echo "IRL table updated successfully."
+else
+    echo "RN IRL Database System Settings up to date, moving on..."
 fi
 
 
