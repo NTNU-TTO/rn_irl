@@ -46,7 +46,7 @@ if [[ "$HAS_COL" == *"$ERROR"* ]]; then
 else
         REV=$(sqlite3 "$IRL_PROD_DB" 'SELECT irl_revision FROM "System Settings"')
 
-        if[[ "$REV" == "$IRL_REV"]]; then
+        if [[ "$REV" == "$IRL_REV" ]]; then
             echo "RN IRL Database System Settings up to date, moving on..."
         else
             echo "Updating IRL definitions to latest revision..."
