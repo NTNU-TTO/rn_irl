@@ -54,6 +54,7 @@ def on_add_new_project():
     project_name = ss.new_project_name
     project_members = ss.new_project_members
     project_leader = ss.new_project_leader
+    project_description = ss.new_project_description
 
     if not project_no.isdigit():
 
@@ -84,6 +85,7 @@ def on_add_new_project():
     project.project_no = project_no
     project.project_name = project_name
     project.project_leader_id = project_leader.user_id
+    project.project_description = project_description
     project.crl = 1
     project.trl = 1
     project.brl = 1

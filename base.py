@@ -90,7 +90,9 @@ class IRLAssessment(Base, SerializerMixin):
     project_no = Column(Integer)
     project_name = Column(Text)
     project_leader_id = mapped_column(ForeignKey('Users.user_id'))
+    project_description = Column(Text)
     assessment_date = Column(Text(10))
+    project_notes = Column(Text)
     crl = Column(Integer)
     trl = Column(Integer)
     brl = Column(Integer)
@@ -306,7 +308,9 @@ class IRLAssessment(Base, SerializerMixin):
             new_irl.project_no = self.project_no
             new_irl.project_name = self.project_name
             new_irl.project_leader_id = self.project_leader_id
+            new_irl.project_description = self.project_description
             new_irl.assessment_date = date
+            new_irl.projet_notes = self.project_notes
             new_irl.crl = self.crl
             new_irl.trl = self.trl
             new_irl.brl = self.brl
@@ -457,6 +461,7 @@ class SystemSettings(Base):
     show_valuations = Column(Integer)
     noreply_address = Column(Text)
     noreply_body = Column(Text)
+    irl_revision = Column(Text)
 
     def update(self):
 
@@ -733,7 +738,7 @@ def irl_ass_changed(irl_ass):
 
     """
     db_irl_ass = get_irl(irl_ass.id)
-    attrs = ('crl', 'trl', 'brl', 'iprl', 'tmrl', 'frl')
+    attrs = ('crl', 'trl', 'brl', 'iprl', 'tmrl', 'frl', 'project_description')
 
     for attr in attrs:
 

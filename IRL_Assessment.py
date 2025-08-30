@@ -120,6 +120,7 @@ def on_IRL_val_changed():
     ss.project.iprl = ss.iprl
     ss.project.tmrl = ss.tmrl
     ss.project.frl = ss.frl
+    ss.project.project_description = ss.project_description
 
 
 def on_IRL_ap_changed():
@@ -133,6 +134,7 @@ def on_IRL_ap_changed():
     """
     # Just update these values for now.
     ss.project.plot_targets = int(ss.ass_plot_targets)
+    ss.project.project_notes= ss.ass_project_notes
     ss.project.crl_notes = ss.ass_crl_notes
     ss.project.trl_notes = ss.ass_trl_notes
     ss.project.brl_notes = ss.ass_brl_notes
@@ -263,6 +265,7 @@ def on_save_assessment():
         return
 
     # Update all values from UI values.
+    irl_ass.project_description = ss.project_description
     irl_ass.crl = ss.crl
     irl_ass.trl = ss.trl
     irl_ass.brl = ss.brl
@@ -358,7 +361,6 @@ def assessment_view(project, read_only=False):
         plot_h = "Visualization"
         target_h = "Targets and action points per %s:"
         target_h = target_h % project.assessment_date
-        # plot, targets = st.tabs(["Plot", "Targets and Action Points"])
         plot, targets = st.tabs([plot_h, target_h])
 
         with plot:
@@ -375,6 +377,10 @@ def assessment_view(project, read_only=False):
                                         smooth,
                                         dark_mode)
                 st.pyplot(fig)
+                st.text_area("Project description",
+                             value=project.project_description,
+                             key='project_description',
+                             on_change=on_IRL_val_changed)
 
         with targets:
 

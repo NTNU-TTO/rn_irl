@@ -268,6 +268,9 @@ def make_action_points(prefix, project_data, ap_cb, expanded=False):
         st.checkbox("Show target levels in plot",
                     project_data.plot_targets,
                     key=prefix + "_plot_targets")
+        st.text_area("Project notes",
+                     project_data.project_notes,
+                     key=prefix + "_project_notes")
         ats = st.tabs(irl_cats)
 
         for at, irl_cat in zip(ats, irl_cats):
@@ -399,6 +402,10 @@ def show_action_points(prefix, project_data, ap_cb, expanded=False):
     header = header % project_data.assessment_date
     irl_cats = ['CRL', 'TRL', 'BRL', 'IPRL', 'TMRL', 'FRL']
 
+    st.text_area("Project notes",
+                 project_data.project_notes,
+                 key=prefix + "_project_notes",
+                 disabled=True)
     ats = st.tabs(irl_cats)
 
     for at, irl_cat in zip(ats, irl_cats):
@@ -1354,6 +1361,7 @@ def add_new_project(users, handler):
         ss.new_project_name = ""
         ss.new_project_members = []
         ss.new_project_leader = None
+        ss.new_project_description = ""
 
     c1.text_input("Project Number",
                   key='new_project_no')
@@ -1366,6 +1374,8 @@ def add_new_project(users, handler):
                  ss.new_project_members,
                  index=None,
                  key='new_project_leader')
+    st.text_area("Project description", 
+                 key='new_project_description')
 
     if status == 2:
 
