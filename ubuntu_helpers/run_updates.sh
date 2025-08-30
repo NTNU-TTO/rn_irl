@@ -51,12 +51,11 @@ else
         else
             echo "Updating IRL definitions to latest revision..."
             sqlite3 /var/lib/rn_irl/irl.sdb <<EOF
-            ATTACH DATABASE '$IRL_GIT_DB' AS newdb;
-            DROP TABLE IF EXISTS IRL;
-            CREATE TABLE IRL AS SELECT * FROM newdb.IRL;
-            DETACH DATABASE newdb;
-            EOF
-
+ATTACH DATABASE '$IRL_GIT_DB' AS newdb;
+DROP TABLE IF EXISTS IRL;
+CREATE TABLE IRL AS SELECT * FROM newdb.IRL;
+DETACH DATABASE newdb;
+EOF
             echo "IRL table updated successfully."
         fi
 fi
