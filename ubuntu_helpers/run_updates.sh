@@ -47,7 +47,7 @@ fi
 
 REV=$(sqlite3 "$IRL_PROD_DB" 'SELECT irl_revision FROM "System Settings"')
 
-if [[ "$REV" != "$IRL_REV" && "$NEW_IRL" == "true" ]]; then
+if [[ "$REV" != "$IRL_REV" || "$NEW_IRL" == "true" ]]; then
 
     echo "Updating IRL definitions to latest revision..."
             sqlite3 /var/lib/rn_irl/irl.sdb <<EOF
