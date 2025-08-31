@@ -43,9 +43,11 @@ def on_add_organisation():
     org = ss.new_org
     org_id = base.add_org(org)
 
-    for faculty in ss.new_fac.split("\n"):
+    if ss.new_fac is not None:
 
-        base.add_fac(org_id, faculty)
+        for faculty in ss.new_fac.split("\n"):
+
+            base.add_fac(org_id, faculty)
 
     ss.new_org = None
     ss.new_fac = None
@@ -61,10 +63,12 @@ def on_add_faculties():
 
     """
     org_id = ss.select_org.org_id
-
-    for fac in ss.new_facs.split("\n"):
-
-        base.add_fac(org_id, fac)
+    
+    if ss.new_facs is not None:
+        
+        for fac in ss.new_facs.split("\n"):
+    
+            base.add_fac(org_id, fac)
 
     ss.new_facs = None
 
@@ -79,9 +83,11 @@ def on_add_departments():
 
     fac_id = ss.select_fac.fac_id
 
-    for dep in ss.new_deps.split("\n"):
+    if ss.new_deps is not None:
 
-        base.add_dep(fac_id, dep)
+        for dep in ss.new_deps.split("\n"):
+
+            base.add_dep(fac_id, dep)
 
     ss.new_deps = None
 
