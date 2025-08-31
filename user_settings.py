@@ -41,7 +41,6 @@ def on_save_user_settings():
     settings.filter_on_user = int(ss.filter_on_user)
     settings.remember_project = int(ss.remember_project)
     settings.ascending_irl = int(ss.ascending_irl)
-    settings.dark_mode = int(ss.dark_mode)
     settings.ap_table_view = int(ss.ap_table_view)
     success = settings.update()
     ss.refresh = success
@@ -54,7 +53,8 @@ if ss.get("pm_map", None) is None:
 
 user_settings = ss['user_settings']
 user = ss.user
-ui.add_logo(user_settings.dark_mode)
+dark_mode = (st.context.theme.type == 'dark')
+ui.add_logo(dark_mode)
 
 # The user settings.
 ui.user_settings(user_settings, on_save_user_settings)

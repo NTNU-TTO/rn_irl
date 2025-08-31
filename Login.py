@@ -84,7 +84,7 @@ def checkPwd():
         ss.status = 'verified'
         ss.user = user
         ss.user_settings = base.get_user_settings(user.user_id)
-        ss.dark_mode = ss.user_settings.dark_mode
+        ss.dark_mode = (st.context.theme.type == 'dark')
         ss.projects = base.get_projects(user, ss.user_settings.filter_on_user)
         ss.refresh = False
 
@@ -96,14 +96,7 @@ def checkPwd():
 def login_view():
 
     ss.status = ss.get("status", "unverified")
-
-    if ss.get('user_settings', None) is None:
-
-        dark_mode = True
-
-    else:
-
-        dark_mode = ss.user_settings.dark_mode
+    dark_mode = (st.context.theme.type == 'dark')
 
     img, hl = st.columns([1, 20])
 
@@ -186,13 +179,7 @@ def login_view():
 
 # Currently no sensible way to get theme information.
 # We assume dark as this is default until otherwise is proven by user.
-if ss.get('user_settings', None) is None:
-
-    dark_mode = True
-
-else:
-
-    dark_mode = ss.user_settings.dark_mode
+dark_mode = (st.context.theme.type == 'dark')
 
 ui.add_logo(dark_mode)
 

@@ -372,7 +372,7 @@ def assessment_view(project, read_only=False):
             if project is not None:
 
                 smooth = ss.user_settings.smooth_irl
-                dark_mode = ss.user_settings.dark_mode
+                dark_mode = (st.context.theme.type == 'dark')
                 fig = data_viz.plot_irl(project,
                                         smooth,
                                         dark_mode)
@@ -511,7 +511,7 @@ def history_view(project):
                         unsafe_allow_html=True)
 
             smooth = ss.user_settings.smooth_irl
-            dark_mode = ss.user_settings.dark_mode
+            dark_mode = (st.context.theme.type == 'dark')
             fig = data_viz.plot_irl(revision,
                                     smooth,
                                     dark_mode,
@@ -591,7 +591,7 @@ def progress_view(project):
                     unsafe_allow_html=True)
 
         smooth = ss.user_settings.smooth_irl
-        dark_mode = ss.user_settings.dark_mode
+        dark_mode = (st.context.theme.type == 'dark')
         fig = data_viz.plot_irl_progress(r0,
                                          r1,
                                          smooth,
@@ -606,13 +606,7 @@ def progress_view(project):
 
 # Currently no sensible way to get theme information.
 # We assume dark as this is default until otherwise is proven by user.
-if ss.get('user_settings', None) is None:
-
-    dark_mode = True
-
-else:
-
-    dark_mode = ss.user_settings.dark_mode
+dark_mode = (st.context.theme.type == 'dark')
 
 ui.add_logo(dark_mode)
 

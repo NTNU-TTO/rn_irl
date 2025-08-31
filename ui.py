@@ -120,7 +120,7 @@ def on_init_system():
         ss.status = 'verified'
         ss.user = user
         ss.user_settings = base.get_user_settings(user.user_id)
-        ss.dark_mode = ss.user_settings.dark_mode
+        ss.dark_mode = (st.context.theme.type == 'dark')
         ss.projects = base.get_projects(user, ss.user_settings.filter_on_user)
         ss.refresh = False
 
@@ -1594,11 +1594,6 @@ def user_settings(user_settings, handler):
 
     with st.form("change_user_settings", border=False):
 
-        st.checkbox("Dark mode for plots",
-                    value=user_settings.dark_mode,
-                    key='dark_mode',
-                    help="Temporary workaround to display images and plots\
-                          according to the selected theme")
         st.checkbox("Smooth IRL levels",
                     value=user_settings.smooth_irl,
                     key='smooth_irl',

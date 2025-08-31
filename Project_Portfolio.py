@@ -37,13 +37,7 @@ irl_labels = ['Customer Readiness Level',
 
 # Currently no sensible way to get theme information.
 # We assume dark as this is default until otherwise is proven by user.
-if ss.get('user_settings', None) is None:
-
-    dark_mode = True
-
-else:
-
-    dark_mode = ss.user_settings.dark_mode
+dark_mode = (st.context.theme.type == 'dark')
 
 ui.add_logo(dark_mode)
 
@@ -102,7 +96,7 @@ else:
         grid[row][col].markdown(header, unsafe_allow_html=True)
         project_no = project.project_no
         smooth = ss.user_settings.smooth_irl
-        dark_mode = ss.user_settings.dark_mode
+        dark_mode = (st.context.theme.type == 'dark')
 
         irl_plot = data_viz.plot_irl(project,
                                      smooth,

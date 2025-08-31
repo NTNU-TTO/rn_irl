@@ -192,13 +192,7 @@ def on_apply_project_team_changes():
 
 
 # The action starts here.
-if ss.get('user_settings', None) is None:
-
-    dark_mode = True
-
-else:
-
-    dark_mode = ss.user_settings.dark_mode
+dark_mode = (st.context.theme.type == 'dark')
 
 ui.add_logo(dark_mode)
 

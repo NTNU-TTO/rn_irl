@@ -28,13 +28,7 @@ from streamlit import session_state as ss
 
 # Currently no sensible way to get theme information.
 # We assume dark as this is default until otherwise is proven by user.
-if ss.get('user_settings', None) is None:
-
-    dark_mode = True
-
-else:
-
-    dark_mode = ss.user_settings.dark_mode
+dark_mode = (st.context.theme.type == 'dark')
 
 ui.add_logo(dark_mode)
 
@@ -94,6 +88,7 @@ with play:
 
     with irl:
 
+        dark_mode = (st.context.theme.type == 'dark')
         scale = list(range(1, 10))
         crl = ss.get("pa_crl", 1)
         trl = ss.get("pa_trl", 1)
@@ -108,7 +103,7 @@ with play:
         pa_irl.iprl = iprl
         pa_irl.tmrl = tmrl
         pa_irl.frl = frl
-        fig = data_viz.plot_irl(pa_irl, smooth=True)
+        fig = data_viz.plot_irl(pa_irl, smooth=True, dark_mode=dark_mode)
         st.pyplot(fig)
         cols = st.columns(6)
         cols[0].selectbox("CRL", scale, index=crl-1, key="pa_crl")

@@ -53,14 +53,7 @@ def on_save_system_settings():
 #
 # The actual UI.
 #
-if ss.get('user_settings', None) is None:
-
-    dark_mode = True
-
-else:
-
-    dark_mode = ss.user_settings.dark_mode
-
+dark_mode = (st.context.theme.type == 'dark')
 ui.add_logo(dark_mode)
 
 sys_settings = base.get_system_settings()
