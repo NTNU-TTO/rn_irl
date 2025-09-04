@@ -603,11 +603,8 @@ def progress_view(project):
 
         ui.show_progress(r0, r1, None)
 
-
-# Currently no sensible way to get theme information.
-# We assume dark as this is default until otherwise is proven by user.
+# We start here.
 dark_mode = (st.context.theme.type == 'dark')
-
 ui.add_logo(dark_mode)
 
 # If no user has logged in, force login, remember which page we came from.
@@ -656,6 +653,7 @@ else:
         if ss.project is None:
 
             project = ss.projects[index]
+            ss.project = project
 
         else:
 
