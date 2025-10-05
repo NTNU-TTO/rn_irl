@@ -32,9 +32,6 @@ port_pg = st.Page("Project_Portfolio.py",
 project_tools_pg = st.Page("project_tools.py",
                            title="Project Tools",
                            icon=":material/construction:")
-reporting_pg = st.Page("reporting.py",
-                       title="Reports",
-                       icon=":material/lab_profile:")
 sys_settings_pg = st.Page("sys_settings.py",
                           title="System Settings",
                           icon=":material/settings:")
@@ -52,7 +49,7 @@ def get_tools_n_settings(user):
 
     elif user.rights == 2:
 
-        return [project_tools_pg, reporting_pg, user_settings_pg]
+        return [project_tools_pg, user_settings_pg]
     
     elif user.rights == 6:
 
@@ -64,12 +61,11 @@ def get_tools_n_settings(user):
   
     elif user.rights == 8:
 
-        return [project_tools_pg, reporting_pg, user_settings_pg]
+        return [project_tools_pg, user_settings_pg]
   
     elif user.rights == 9:
 
         return [project_tools_pg,
-                reporting_pg,
                 admin_tools_pg,
                 user_settings_pg,
                 sys_settings_pg]
