@@ -310,7 +310,7 @@ class IRLAssessment(Base, SerializerMixin):
             new_irl.project_leader_id = self.project_leader_id
             new_irl.project_description = self.project_description
             new_irl.assessment_date = date
-            new_irl.projet_notes = self.project_notes
+            new_irl.project_notes = self.project_notes
             new_irl.crl = self.crl
             new_irl.trl = self.trl
             new_irl.brl = self.brl

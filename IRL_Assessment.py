@@ -28,6 +28,7 @@ import utils
 
 from streamlit import session_state as ss
 
+DEBUG = False
 
 @st.dialog("You have incomplete action points!")
 def override_dlg():
@@ -153,12 +154,12 @@ def on_IRL_ap_changed():
     ss.project.iprl_target_lead = ss.ass_iprl_target_lead
     ss.project.tmrl_target_lead = ss.ass_tmrl_target_lead
     ss.project.frl_target_lead = ss.ass_frl_target_lead
-    ss.project.crl_target_duedate = ss.ass_crl_duedate
-    ss.project.trl_target_duedate = ss.ass_trl_duedate
-    ss.project.brl_target_duedate = ss.ass_brl_duedate
-    ss.project.iprl_target_duedate = ss.ass_iprl_duedate
-    ss.project.tmrl_target_duedate = ss.ass_tmrl_duedate
-    ss.project.frl_target_duedate = ss.ass_frl_duedate
+    ss.project.crl_target_duedate = ss.ass_crl_target_duedate
+    ss.project.trl_target_duedate = ss.ass_trl_target_duedate
+    ss.project.brl_target_duedate = ss.ass_brl_target_duedate
+    ss.project.iprl_target_duedate = ss.ass_iprl_target_duedate
+    ss.project.tmrl_target_duedate = ss.ass_tmrl_target_duedate
+    ss.project.frl_target_duedate = ss.ass_frl_target_duedate
     ss.project.update(True)
 
     for irl in ['CRL', 'TRL', 'BRL', 'IPRL', 'TMRL', 'FRL']:
@@ -248,7 +249,28 @@ def on_project_changed():
     ss.revision_r = None
     ss.progress_r0 = None
     ss.progress_r1 = None
+    sync_session_state()
 
+
+def sync_session_state():
+    # Streamlit does not work well with actual objects between reruns anymore.
+    # We need to sync all information from the project explicitly to the session state.
+    ss["project_description"] = ss.project.project_description
+    ss["ass_project_notes"] = ss.project.project_notes
+    ss["ass_plot_targets"] = ss.project.plot_targets
+
+    irl_cats = ['crl', 'trl', 'brl', 'iprl', 'tmrl', 'frl']
+
+    team = base.get_project_team(ss.project.project_no)
+    team_options = team.username.to_list()
+
+    for cat in irl_cats:
+
+        ss[f"ass_{cat}_target"] = getattr(ss.project, f"{cat}_target")
+        ss[f"ass_{cat}_target_lead"] = getattr(ss.project, f"{cat}_target_lead")
+        date = getattr(ss.project, f"{cat}_target_duedate")
+        ss[f"ass_{cat}_target_duedate"] = utils.dbdate2datetime(date)
+        ss[f"ass_{cat}_notes"] = getattr(ss.project, f"{cat}_notes")
 
 def on_save_assessment():
     """
@@ -275,13 +297,11 @@ def on_save_assessment():
 
     # ...and save to database...
     error = irl_ass.update()
-    ss.refresh = True
-    new_ass_id = base.get_irl_ass_id(ss.project.project_no)
 
     if keep_ass:
-
         base.copy_aps(old_ass_id, new_ass_id)
 
+    ss.refresh = True
     ss.keep_ass = None
 
     if error is None:
@@ -289,26 +309,26 @@ def on_save_assessment():
         ss.save_ass_state = 1
 
     else:
-
+        
         ss.save_ass_state = 0
         ss.save_ass_error = error
 
 
-def assessment_view(project, read_only=False):
+def assessment_view(read_only=False):
 
     # IRL Level Sliders
     st.sidebar.slider("Customer Readiness Level [CRL]",
                       min_value=1,
                       max_value=9,
                       step=1,
-                      value=project.crl,
+                      value=ss.project.crl,
                       key="crl", on_change=on_IRL_val_changed,
                       disabled=read_only)
     st.sidebar.slider("Technology Readiness Level [TRL]",
                       min_value=1,
                       max_value=9,
                       step=1,
-                      value=project.trl,
+                      value=ss.project.trl,
                       key="trl",
                       on_change=on_IRL_val_changed,
                       disabled=read_only)
@@ -316,7 +336,7 @@ def assessment_view(project, read_only=False):
                       min_value=1,
                       max_value=9,
                       step=1,
-                      value=project.brl,
+                      value=ss.project.brl,
                       key="brl",
                       on_change=on_IRL_val_changed,
                       disabled=read_only)
@@ -324,7 +344,7 @@ def assessment_view(project, read_only=False):
                       min_value=1,
                       max_value=9,
                       step=1,
-                      value=project.iprl,
+                      value=ss.project.iprl,
                       key="iprl",
                       on_change=on_IRL_val_changed,
                       disabled=read_only)
@@ -332,7 +352,7 @@ def assessment_view(project, read_only=False):
                       min_value=1,
                       max_value=9,
                       step=1,
-                      value=project.tmrl,
+                      value=ss.project.tmrl,
                       key="tmrl",
                       on_change=on_IRL_val_changed,
                       disabled=read_only)
@@ -340,67 +360,77 @@ def assessment_view(project, read_only=False):
                       min_value=1,
                       max_value=9,
                       step=1,
-                      value=project.frl,
+                      value=ss.project.frl,
                       key="frl",
                       on_change=on_IRL_val_changed,
                       disabled=read_only)
 
     # Embed slider values in list for plotting purposes.
-    ss['irl_targets'] = [project.crl_target,
-                         project.trl_target,
-                         project.brl_target,
-                         project.iprl_target,
-                         project.tmrl_target,
-                         project.frl_target]
+    ss['irl_targets'] = [ss.project.crl_target,
+                         ss.project.trl_target,
+                         ss.project.brl_target,
+                         ss.project.iprl_target,
+                         ss.project.tmrl_target,
+                         ss.project.frl_target]
 
     # Set up the UI. Viz on the left, descriptions on the right.
     col1, col2 = st.columns([0.5, 0.5])
+
+    if DEBUG:
+
+        st.write(f"Project ID: {ss.project.project_no}")
 
     with col1:
 
         plot_h = "Visualization"
         target_h = "Targets and action points per %s:"
-        target_h = target_h % project.assessment_date
+        target_h = target_h % ss.project.assessment_date
         plot, targets = st.tabs([plot_h, target_h])
 
         with plot:
 
             header = "<h3 style='text-align: center;'>\
                       KTH Innovation Readiness Level™<br>%s</h3>"
-            st.markdown(header % project, unsafe_allow_html=True)
+            st.markdown(header % ss.project, unsafe_allow_html=True)
 
-            if project is not None:
+            if ss.project is not None:
 
                 smooth = ss.user_settings.smooth_irl
                 dark_mode = (st.context.theme.type == 'dark')
-                fig = data_viz.plot_irl(project,
+                fig = data_viz.plot_irl(ss.project,
                                         smooth,
                                         dark_mode)
                 st.pyplot(fig)
                 st.text_area("Project description",
-                             value=project.project_description,
+                             value=ss.project.project_description,
                              key='project_description',
                              on_change=on_IRL_val_changed)
 
         with targets:
 
+            if DEBUG:
+
+                st.write("FROM IRL_ASSESSMENT.PY:")
+                st.write(f"Project ID: {ss.project.project_no}")
+                st.write(ss.project.project_notes)
+
             # Target levels and notes.
-            ass_changed = base.irl_ass_changed(project)
+            ass_changed = base.irl_ass_changed(ss.project)
 
             if read_only:
 
-                ui.show_action_points('ass', project, None)
+                ui.show_action_points('ass', ss.project, None)
 
             elif ass_changed:
 
                 st.warning("You have unsaved assessment changes.\
                            Please save these first.")
-                ui.show_action_points('ass', project, None)
+                ui.show_action_points('ass', ss.project, None)
 
             else:
 
                 ui.make_action_points('ass',
-                                      project,
+                                      ss.project,
                                       on_IRL_ap_changed)
 
             if not read_only:
@@ -655,11 +685,9 @@ else:
             project = ss.projects[index]
             ss.project = project
 
-        else:
+        sync_session_state()
 
-            project = ss.project
-
-        project_no = project.project_no
+        project_no = ss.project.project_no
         utils.get_project_history(project_no)
         st.sidebar.radio("View",
                          ["Assessment", "History", "Progress"],
@@ -673,12 +701,12 @@ else:
             project_rights = base.get_project_rights(project_no,
                                                      ss.user.user_id)
             read_only = (user_rights in [0, 6, 7]) or (project_rights == 0)
-            assessment_view(project, read_only)
+            assessment_view(read_only)
 
         elif ss.irl_view == 'History':
 
-            history_view(project)
+            history_view(ss.project)
 
         elif ss.irl_view == 'Progress':
 
-            progress_view(project)
+            progress_view(ss.project)

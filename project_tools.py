@@ -99,6 +99,7 @@ def on_add_new_project():
     project.tmrl_target = 1
     project.frl_target = 1
     project.active = 1
+    project.plot_targets = False
     proj_error = project.insert()
     team_error = base.add_project_team(project_no, project_members)
     ss.refresh = True

@@ -260,16 +260,16 @@ def make_action_points(prefix, project_data, ap_cb, expanded=False):
 
     # Target levels and notes.
     header = "Targets and action points per %s:"
-    header = header % project_data.assessment_date
+    header = header % ss.project.assessment_date
     irl_cats = ['CRL', 'TRL', 'BRL', 'IPRL', 'TMRL', 'FRL']
-
-    with st.form("ap_form_" + prefix, border=False):
-
+ 
+    with st.form(key=f"{prefix}_ap_form", border=False):
+        
         st.checkbox("Show target levels in plot",
-                    project_data.plot_targets,
+                    ss[prefix + "_plot_targets"],
                     key=prefix + "_plot_targets")
         st.text_area("Project notes",
-                     project_data.project_notes,
+                     ss[prefix + "_project_notes"],
                      key=prefix + "_project_notes")
         ats = st.tabs(irl_cats)
 
@@ -280,46 +280,40 @@ def make_action_points(prefix, project_data, ap_cb, expanded=False):
             with at:
 
                 at_col1, at_col2, at_col3 = st.columns(3)
-                team = base.get_project_team(project_data.project_no)
+                team = base.get_project_team(ss.project.project_no)
 
                 with at_col1:
 
-                    index = getattr(project_data, '%s_target' % low_cat)-1
+                    index = getattr(ss.project, '%s_target' % low_cat)-1
                     st.selectbox("%s Target Level" % irl_cat,
                                  options=[1, 2, 3, 4, 5, 6, 7, 8, 9],
                                  key='%s_%s_target' % (prefix, low_cat),
                                  index=index)
 
                 with at_col2:
-                    lead = getattr(project_data,
-                                   "%s_target_lead" % low_cat)
-                    key = "%s_%s_target_lead" % (prefix, low_cat)
+
+                    key = f"{prefix}_{low_cat}_target_lead"
+                    lead = ss[key]                    
                     options = team.username.to_list()
-
-                    if lead is not None:
-
-                        lead = options.index(lead)
-
                     st.selectbox("Lead:",
                                  options=options,
-                                 index=lead,
                                  key=key)
 
                 with at_col3:
 
-                    date = getattr(project_data,
-                                   "%s_target_duedate" % low_cat)
+                    key = f"{prefix}_{low_cat}_target_duedate"
+                    date = ss[key]
                     st.date_input("Due date:",
-                                  key='%s_%s_duedate' % (prefix, low_cat),
+                                  key=key,
                                   format="YYYY-MM-DD",
-                                  value=utils.dbdate2datetime(date))
-
+                                  value=date)
+                    
+                key = f"{prefix}_{low_cat}_notes"
                 st.text_area("%s general comments:" % irl_cat,
-                             value=getattr(project_data,
-                                           '%s_notes' % low_cat),
-                             key='%s_%s_notes' % (prefix, low_cat))
+                             value=ss[key],
+                             key=key)
 
-                aps = base.get_action_points(project_data.id, irl_cat)
+                aps = base.get_action_points(ss.project.id, irl_cat)
                 ss["%s_%s_df" % (prefix, low_cat)] = aps
                 cc = {"action_point":
                       st.column_config.TextColumn(
@@ -366,13 +360,12 @@ def make_action_points(prefix, project_data, ap_cb, expanded=False):
                                              'due_date',
                                              'comment'],
                                column_config=cc,
-                               use_container_width=True,
+                               width='stretch',
                                hide_index=True,
                                num_rows="dynamic",
                                key='%s_%s_aps' % (prefix, low_cat))
 
-        st.form_submit_button("Update action points",
-                              on_click=ap_cb)
+        st.form_submit_button("Update action points", on_click=ap_cb)
 
         # mom = ss.get("mom", None)
 
@@ -506,7 +499,7 @@ def show_action_points(prefix, project_data, ap_cb, expanded=False):
                                        'due_date',
                                        'comment'],
                          column_config=cc,
-                         use_container_width=True,
+                         width='stretch',
                          hide_index=True,
                          key='%s_%s_aps' % (prefix, low_cat))
 
@@ -1496,7 +1489,7 @@ def edit_project_team(users, edit_cb, team_change_cb):
                                    required=True,
                                    ),
                                },
-                           use_container_width=True,
+                           width='stretch',
                            hide_index=True,
                            key="project_team_editor")
             submit = st.form_submit_button("Apply project team changes")

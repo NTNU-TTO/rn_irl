@@ -11,34 +11,37 @@ import ui
 
 from streamlit import session_state as ss
 
+admin_tools_pg = st.Page("admin_tools.py",
+                         title="Admin Tools",
+                         icon=":material/admin_panel_settings:")
 intro_pg = st.Page("Introduction.py",
                    title="Introduction to KTH IRL",
                    icon=":material/info:")
+irl_ass_pg = st.Page("IRL_Assessment.py",
+                     title="Project Assessment",
+                     icon=":material/analytics:")
 login_pg = st.Page("Login.py",
                    title="Login",
                    icon=":material/login:")
 logout_pg = st.Page("Login.py",
                     title="Logout",
                     icon=":material/login:")
-
-irl_ass_pg = st.Page("IRL_Assessment.py",
-                     title="Project Assessment",
-                     icon=":material/analytics:")
 port_pg = st.Page("Project_Portfolio.py",
                   title="Project Portfolio",
                   icon=":material/database:")
 project_tools_pg = st.Page("project_tools.py",
                            title="Project Tools",
                            icon=":material/construction:")
-admin_tools_pg = st.Page("admin_tools.py",
-                         title="Admin Tools",
-                         icon=":material/admin_panel_settings:")
-user_settings_pg = st.Page("user_settings.py",
-                           title="User Settings",
-                           icon=":material/manage_accounts:")
+reporting_pg = st.Page("reporting.py",
+                       title="Reports",
+                       icon=":material/lab_profile:")
 sys_settings_pg = st.Page("sys_settings.py",
                           title="System Settings",
                           icon=":material/settings:")
+user_settings_pg = st.Page("user_settings.py",
+                           title="User Settings",
+                           icon=":material/manage_accounts:")
+
 
 
 def get_tools_n_settings(user):
@@ -49,7 +52,7 @@ def get_tools_n_settings(user):
 
     elif user.rights == 2:
 
-        return [project_tools_pg, user_settings_pg]
+        return [project_tools_pg, reporting_pg, user_settings_pg]
     
     elif user.rights == 6:
 
@@ -61,11 +64,12 @@ def get_tools_n_settings(user):
   
     elif user.rights == 8:
 
-        return [project_tools_pg, user_settings_pg]
+        return [project_tools_pg, reporting_pg, user_settings_pg]
   
     elif user.rights == 9:
 
         return [project_tools_pg,
+                reporting_pg,
                 admin_tools_pg,
                 user_settings_pg,
                 sys_settings_pg]
