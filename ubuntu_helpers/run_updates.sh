@@ -79,3 +79,6 @@ if [[ "$HAS_COL" == *"$ERROR"* ]]; then
 else
         echo "RN IRL Database IRL Data table up to date, moving on..."
 fi
+
+echo "Fixing possible NULL values in IRL Data/plot_targets..."
+sqlite3 "$IRL_PROD_DB" 'UPDATE "IRL Data" SET plot_targets = 0 WHERE plot_targets IS NULL;'
