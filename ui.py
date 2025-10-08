@@ -1594,12 +1594,14 @@ def user_settings(user_settings, handler):
                           diffrent IRL values to give what some people\
                           including the author thinks is more esthetically\
                           pleasing look")
-        st.checkbox("Filter projects on active user",
+        st.checkbox("Show only projects where I am project leader",
                     value=user_settings.filter_on_user,
                     key='filter_on_user',
-                    help="When selected, only projects where the active user\
-                          is project leader be visible in the user\
-                          interface.")
+                    help="When selected, only projects where you are\
+                          the project leader will be visible in the user\
+                          interface. When not selected, all projects\
+                          where you are a part of the project team\
+                          will be visible.")
         st.checkbox("Remember current project on next login",
                     value=user_settings.remember_project,
                     key='remember_project',
@@ -1638,3 +1640,4 @@ def user_settings(user_settings, handler):
                 time.sleep(1)
 
             st.rerun()
+
