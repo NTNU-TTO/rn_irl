@@ -301,12 +301,10 @@ def make_action_points(prefix, project_data, ap_cb, expanded=False):
                     date = ss[key]
                     st.date_input("Due date:",
                                   key=key,
-                                  format="YYYY-MM-DD",
-                                  value=date)
+                                  format="YYYY-MM-DD")
                     
                 key = f"{prefix}_{low_cat}_notes"
                 st.text_area("%s general comments:" % irl_cat,
-                             value=ss[key],
                              key=key)
 
                 aps = base.get_action_points(ss.project.id, irl_cat)
