@@ -43,7 +43,7 @@ def get_version(pkg):
 
     return version
 
-libs = ["bcrypt", "matplotlib", "numpy", "pandas", "scipy", "streamlit", "sqlalchemy"]  # Add your libraries here
+libs = ["bcrypt", "matplotlib", "numpy", "pandas", "reportlab", "scipy", "streamlit", "sqlalchemy"]  # Add your libraries here
 
 # Get theme from runtime context.
 dark_mode = (st.context.theme.type == 'dark')
