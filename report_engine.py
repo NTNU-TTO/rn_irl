@@ -178,7 +178,6 @@ def get_portfolio_report(portfolio):
         elements.append(Paragraph(f"<b>Project Description:</b> {irl_ass.project_description}",
                         styles['BodyText']))
         elements.append(Spacer(1, 12))        
-        elements.append(HRFlowable(width="100%", thickness=1, color=colors.grey))  # Horizontal line
         irl_table = get_irl_table(irl_ass)
         elements.append(irl_table)
         notes_spacer = Spacer(1, 12)
