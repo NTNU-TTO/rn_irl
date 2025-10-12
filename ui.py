@@ -266,10 +266,8 @@ def make_action_points(prefix, project_data, ap_cb, expanded=False):
     with st.form(key=f"{prefix}_ap_form", border=False):
         
         st.checkbox("Show target levels in plot",
-                    ss[prefix + "_plot_targets"],
                     key=prefix + "_plot_targets")
         st.text_area("Project notes",
-                     ss[prefix + "_project_notes"],
                      key=prefix + "_project_notes")
         ats = st.tabs(irl_cats)
 
@@ -284,11 +282,9 @@ def make_action_points(prefix, project_data, ap_cb, expanded=False):
 
                 with at_col1:
 
-                    index = getattr(ss.project, '%s_target' % low_cat)-1
                     st.selectbox("%s Target Level" % irl_cat,
                                  options=[1, 2, 3, 4, 5, 6, 7, 8, 9],
-                                 key='%s_%s_target' % (prefix, low_cat),
-                                 index=index)
+                                 key='%s_%s_target' % (prefix, low_cat))
 
                 with at_col2:
 
