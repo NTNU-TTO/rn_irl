@@ -19,12 +19,7 @@ git clone https://github.com/NTNU-TTO/rn_irl
 echo "Installing requirements..."
 source /etc/rn_irl_staging/bin/activate
 cd /etc/rn_irl_staging
-pip install streamlit
-pip install bcrypt
-pip install numpy
-pip install scipy
-pip install matplotlib
-pip install sqlalchemy
+pip install -r /etc/rn_irl_staging/bin/rn_irl/requirements.txt
 
 # Copy config files from live environment
 echo "Duplicating existing configuration..."

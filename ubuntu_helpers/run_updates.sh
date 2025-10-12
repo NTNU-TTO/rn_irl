@@ -79,3 +79,29 @@ if [[ "$HAS_COL" == *"$ERROR"* ]]; then
 else
         echo "RN IRL Database IRL Data table up to date, moving on..."
 fi
+
+echo "Double checking installed packages against requirements.txt..."
+source /etc/rn_irl_staging/bin/activate
+
+while IFS= read -r line; do
+  [[ -z "$line" || "$line" == \#* ]] && continue
+
+  # Extract package name and required version
+  pkg=$(echo "$line" | sed -E 's/[<>=!].*//')
+  required=$(echo "$line" | grep -oE '[<>=!]=.*')
+
+  # Get installed version
+  installed=$(pip show "$pkg" 2>/dev/null | awk '/Version:/ {print $2}')
+
+  if [[ -z "$installed" ]]; then
+    echo "$pkg not installed. Installing: $line"
+    pip install "$line"
+  elif [[ "$line" == "$pkg==$installed" ]]; then
+    echo "$pkg==$installed matches requirements."
+  else
+    echo "$pkg version mismatch: required $required, installed $installed"
+    echo "Reinstalling: $line"
+
+    pip install "$line" >> /var/log/rn_irl_install.log 2>&1
+  fi
+done < /etc/rn_irl_staging/bin/rn_irl/requirements.txt

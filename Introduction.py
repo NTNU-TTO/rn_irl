@@ -18,6 +18,7 @@ You should have received a copy of the GNU Affero General Public License
 along with Really Nice IRL. If not, see:
 <https://www.gnu.org/licenses/agpl-3.0.html>.
 """
+import importlib.metadata
 
 import streamlit as st
 import base
@@ -26,13 +27,32 @@ import ui
 
 from streamlit import session_state as ss
 
-# Currently no sensible way to get theme information.
-# We assume dark as this is default until otherwise is proven by user.
+def get_version(pkg):
+
+    try:
+
+        version = importlib.metadata.version(pkg)
+
+    except importlib.metadata.PackageNotFoundError:
+
+        version = "unknown"
+
+        if pkg == "rn_irl":
+
+            version = "development version"
+
+    return version
+
+libs = ["bcrypt", "matplotlib", "numpy", "pandas", "scipy", "streamlit", "sqlalchemy"]  # Add your libraries here
+
+# Get theme from runtime context.
 dark_mode = (st.context.theme.type == 'dark')
 
 ui.add_logo(dark_mode)
 
-about, play = st.tabs(['About', 'Play Around'])
+about, play, version = st.tabs(['About KTH Innovation Readines Level™',
+                                'Play around with the framework',
+                                 'About Really Nice IRL'])
 
 with about:
 
@@ -117,3 +137,18 @@ with play:
     with explainer:
 
         ui.irl_explainer()
+
+with version:
+
+    st.header("About Really Nice IRL")
+    body = "Really Nice IRL is developed and maintained by Lodve Berre.  \n"
+    body += "The app is open source under the APGL3.0 licene and available on at https://github.com/NTNU-TTO/rn_irl/  \n"
+    body += "The current version of Really Nice IRL is: **{}**  \n".format(get_version("rn_irl"))
+    body += "The versions of the main libraries used in the app are:"
+    st.markdown(body)
+
+     # Use HTML for indentation
+    lib_versions = "".join(
+        [f"<div style='margin-left:2em;'>• <b>{lib}</b>: {get_version(lib)}</div>" for lib in libs]
+    )
+    st.markdown(lib_versions, unsafe_allow_html=True)

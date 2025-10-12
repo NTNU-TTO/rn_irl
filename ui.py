@@ -1638,3 +1638,70 @@ def user_settings(user_settings, handler):
                 time.sleep(1)
 
             st.rerun()
+
+
+def delete_irl_ass(user):
+
+    def irl_ass_labeler(obj):
+        
+        notes = ""
+        
+        if obj.project_notes is not None:
+            notes = obj.project_notes[:42]
+
+        return f"Revision date: {obj.assessment_date} Notes: {notes}..."
+
+    st.subheader("Delete IRL Assessment permanently")
+    st.write("WARNING: If you delete all IRL assessments, you will also delete the entire project!")
+    with st.container():
+
+        pro, ass = st.columns(2)
+        filt = ss.user_settings.filter_on_user
+
+        with pro:
+
+            active_projs = base.get_projects(user, filt, True)
+            st.selectbox("Select project to delete assessment(s) from",
+                            active_projs,
+                            placeholder="Select project",
+                            key="project_to_delete_from")
+
+        with ass:
+
+            irl_asses = base.get_project_history(ss.project_to_delete_from.project_no)
+            st.multiselect("Select IRL assessments to delete permanently",
+                           irl_asses,
+                           placeholder="Select assessment(s)",
+                           key="assessments_to_delete",
+                           format_func=irl_ass_labeler)
+
+        i_know = st.checkbox("Yes, I know what I am doing...",
+                             key="i_know_what_im_doing")
+        i_really_know = st.checkbox("Seriously, I really know...",
+                                    key="i_really_know")
+
+        irl_asses = len(ss.assessments_to_delete) > 0
+        yes = ss.i_know_what_im_doing
+        yes_yes = ss.i_really_know
+        del_dis = not(irl_asses and yes and yes_yes)
+
+        if st.button("Delete selected assessments permanently.",
+                     disabled=del_dis):
+
+            success = base.delete_assessments(
+                ss.assessments_to_delete)
+
+            if success:
+
+                st.success("Selected assessment(s) deleted!")
+
+            else:
+
+                st.error("Could not delete assessment(s)!")
+
+            with st.spinner("Updating database..."):
+
+                ss.refresh = True
+                time.sleep(1)
+
+            st.rerun()

@@ -752,6 +752,50 @@ def irl_ass_changed(irl_ass):
     return False
 
 
+def delete_assessments(irl_asses):
+    """
+    Convenience method for deleted IRL assessments permanently.
+    Also cleans up action points related to the assessment.
+
+    Parameters
+    ----------
+    irl_ass_ids: list of ids
+
+    Returns
+    -------
+    True if delections were successful, False if errors.
+    """
+
+    success = True
+    engine = create_engine(st.secrets.db_details.db_path)
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    irl_ass_ids = []
+
+    for irl_ass in irl_asses:
+
+        irl_ass_ids.append(irl_ass.id)        
+        aps = session.query(ActionPoint).filter(
+            ActionPoint.assessment_id == irl_ass.id).all()
+        ap_ids = [ap.ap_id for ap in aps]
+        ap_dc = session.query(ActionPoint).filter(ActionPoint.ap_id.in_(ap_ids)).delete(synchronize_session=False)
+
+        if ap_dc != len(ap_ids):
+
+            success = False
+
+    irl_ass_dc = session.query(IRLAssessment).filter(IRLAssessment.id.in_(irl_ass_ids)).delete(synchronize_session=False)
+    session.commit()
+    session.close()
+
+    if irl_ass_dc != len(irl_ass_ids):
+
+        success = False
+
+    return success
+
+
 def get_irl_table(irl_type, ascending=False):
     """
     Convenience method for grabbing IRL levels and descriptions from DB.

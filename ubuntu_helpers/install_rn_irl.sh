@@ -18,12 +18,7 @@ chown root:rn_irl -R rn_irl
 source /etc/rn_irl/bin/activate
 
 # Install required python modules.
-pip install streamlit
-pip install bcrypt
-pip install numpy
-pip install scipy
-pip install matplotlib
-pip install sqlalchemy
+pip install -r rn_irl/requirements.txt
 
 # Move the source code inside the virtual python environment.
 mv rn_irl /etc/rn_irl/bin

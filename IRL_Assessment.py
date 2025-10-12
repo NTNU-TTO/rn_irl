@@ -288,6 +288,7 @@ def on_save_assessment():
 
     # Update all values from UI values.
     irl_ass.project_description = ss.project_description
+    irl_ass.project_notes = ss.ass_project_notes
     irl_ass.crl = ss.crl
     irl_ass.trl = ss.trl
     irl_ass.brl = ss.brl
@@ -299,6 +300,8 @@ def on_save_assessment():
     error = irl_ass.update()
 
     if keep_ass:
+
+        new_ass_id = base.get_irl_ass_id(irl_ass.project_no)
         base.copy_aps(old_ass_id, new_ass_id)
 
     ss.refresh = True
@@ -402,7 +405,6 @@ def assessment_view(read_only=False):
                                         dark_mode)
                 st.pyplot(fig)
                 st.text_area("Project description",
-                             value=ss.project.project_description,
                              key='project_description',
                              on_change=on_IRL_val_changed)
 

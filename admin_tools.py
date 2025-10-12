@@ -91,6 +91,9 @@ def on_add_departments():
 
     ss.new_deps = None
 
+def on_delete_irl_ass():
+    print("Not deleting anything yet.")
+
 # The action starts here.
 dark_mode = (st.context.theme.type == 'dark')
 ui.add_logo(dark_mode)
@@ -109,3 +112,15 @@ st.divider()
 ui.add_faculties(on_add_faculties)
 st.divider()
 ui.add_departments(on_add_departments)
+st.divider()
+st.markdown("""
+            <div style="border:2px solid red; padding:10px; border-radius:5px;">
+            <h3 style="color:red;">🚨 Danger Zone</h3>
+            <p><strong>Be careful!</strong></p>
+            <p>Actions here are irreversible and may affect critical data.</p>
+            <p><strong>DO NOT touch anything here unless you are absolutely sure you know what you are doing!</strong></p>
+            </div>
+            """,
+            unsafe_allow_html=True)
+st.divider()
+ui.delete_irl_ass(ss.user)
