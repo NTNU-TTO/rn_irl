@@ -84,24 +84,28 @@ echo "Double checking installed packages against requirements.txt..."
 source /etc/rn_irl_staging/bin/activate
 
 while IFS= read -r line; do
+  # Skip empty lines and comments
   [[ -z "$line" || "$line" == \#* ]] && continue
 
-  # Extract package name and required version
-  pkg=$(echo "$line" | sed -E 's/[<>=!].*//')
-  required=$(echo "$line" | grep -oE '[<>=!]=.*')
+  # Only process lines with '=='
+  if [[ "$line" == *"=="* ]]; then
+    pkg=$(echo "$line" | cut -d= -f1)
+    required=$(echo "$line" | cut -d= -f3)
+    installed=$(pip show "$pkg" 2>/dev/null | awk '/Version:/ {print $2}')
+    clean_required=$(echo "$required" | tr -d '\r\n')
+    clean_installed=$(echo "$installed" | tr -d '\r\n')
 
-  # Get installed version
-  installed=$(pip show "$pkg" 2>/dev/null | awk '/Version:/ {print $2}')
-
-  if [[ -z "$installed" ]]; then
-    echo "$pkg not installed. Installing: $line"
-    pip install "$line"
-  elif [[ "$line" == "$pkg==$installed" ]]; then
-    echo "$pkg==$installed matches requirements."
+    if [[ -z "$installed" ]]; then
+      echo "$pkg not installed. Installing: $line"
+      pip install "$line"
+    elif [[ "$clean_installed" == "$clean_required" ]]; then
+      echo "$pkg==$clean_installed matches required version."
+    else
+      echo "$pkg version mismatch: installed $clean_installed, required $clean_required"
+      echo "Reinstalling: $line"
+    fi
   else
-    echo "$pkg version mismatch: required $required, installed $installed"
-    echo "Reinstalling: $line"
-
+    echo "  Skipping unsupported requirement format: $line"
     pip install "$line" >> /var/log/rn_irl_install.log 2>&1
   fi
 done < /etc/rn_irl_staging/bin/rn_irl/requirements.txt
