@@ -29,7 +29,7 @@ service rn_irl stop
 
 # Back up current production environment.
 echo "Backing up current production environment..."
-DATE=$(date -I)
+DATE=$(date +"%Y-%m-%d_%H-%M-%S")
 mv /etc/rn_irl /etc/rn_irl_$DATE
 
 # Move staging enviroment path to production.
