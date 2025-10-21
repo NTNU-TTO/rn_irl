@@ -43,6 +43,7 @@ def on_save_system_settings():
     settings.noreply_address = ss.noreply_address
     settings.noreply_body = ss.noreply_body
     settings.show_valuations = int(ss.show_valuations)
+    settings.forward_ass_comments = int(ss.forward_ass_comments)
     settings.update()
     edited_rows = ss.startup_value_matrix['edited_rows']
     base.update_startup_values(edited_rows)
@@ -64,11 +65,14 @@ cols1[0].text_input("Dark mode logo URI",
 cols1[1].text_input("Light mode logo URI",
                     key="logo_uri_light",
                     value=sys_settings.logo_uri_light)
-
-cols2 = st.columns(2, vertical_alignment="bottom")
-cols2[0].text_input("Logo web page link",
+cols1[2].text_input("Logo web page link",
                     key='logo_uri',
                     value=sys_settings.logo_uri)
+cols2 = st.columns(3, vertical_alignment="bottom")
+cols2[0].checkbox("Keep assessment comments",
+                  key="forward_ass_comments",
+                  value=sys_settings.forward_ass_comments,
+                  help="If checked, comments made in the targets and action points UI will be kept when making a new assessment.")
 cols2[1].checkbox("Show valuations",
                   key="show_valuations",
                   value=sys_settings.show_valuations)

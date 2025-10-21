@@ -273,7 +273,7 @@ class IRLAssessment(Base, SerializerMixin):
 
         return error
 
-    def update(self, overwrite=False):
+    def update(self, overwrite=False, keep_ass_notes=False):
 
         error = None
         engine = create_engine(st.secrets.db_details.db_path)
@@ -310,19 +310,23 @@ class IRLAssessment(Base, SerializerMixin):
             new_irl.project_leader_id = self.project_leader_id
             new_irl.project_description = self.project_description
             new_irl.assessment_date = date
-            new_irl.project_notes = self.project_notes
             new_irl.crl = self.crl
             new_irl.trl = self.trl
             new_irl.brl = self.brl
             new_irl.iprl = self.iprl
             new_irl.tmrl = self.tmrl
             new_irl.frl = self.frl
-            new_irl.crl_notes = self.crl_notes
-            new_irl.trl_notes = self.trl_notes
-            new_irl.brl_notes = self.brl_notes
-            new_irl.iprl_notes = self.iprl_notes
-            new_irl.tmrl_notes = self.tmrl_notes
-            new_irl.frl_notes = self.frl_notes
+
+            if keep_ass_notes:
+
+                new_irl.project_notes = self.project_notes
+                new_irl.crl_notes = self.crl_notes
+                new_irl.trl_notes = self.trl_notes
+                new_irl.brl_notes = self.brl_notes
+                new_irl.iprl_notes = self.iprl_notes
+                new_irl.tmrl_notes = self.tmrl_notes
+                new_irl.frl_notes = self.frl_notes
+
             new_irl.crl_target = self.crl_target
             new_irl.trl_target = self.trl_target
             new_irl.brl_target = self.brl_target
@@ -462,6 +466,7 @@ class SystemSettings(Base):
     noreply_address = Column(Text)
     noreply_body = Column(Text)
     irl_revision = Column(Text)
+    forward_ass_comments = Column(Integer)
 
     def update(self):
 

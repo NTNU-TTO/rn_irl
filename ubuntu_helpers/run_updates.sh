@@ -61,6 +61,14 @@ else
     echo "RN IRL Database System Settings up to date, moving on..."
 fi
 
+HAS_COL=$(sqlite3 "$IRL_PROD_DB" "SELECT forward_ass_comments FROM 'System Settings';" 2>&1)
+
+if [[ "$HAS_COL" == *"$ERROR"* ]]; then
+        echo "RN IRL Database System Settings table not up to date, adding column forward_ass_comments."
+        sqlite3 "$IRL_PROD_DB" 'ALTER TABLE "System Settings" ADD COLUMN forward_ass_comments INTEGER(1);'
+else
+        echo "RN IRL Database System Settings table up to date, moving on..."
+fi
 
 HAS_COL=$(sqlite3 "$IRL_PROD_DB" "SELECT project_description FROM 'IRL Data';" 2>&1)
 

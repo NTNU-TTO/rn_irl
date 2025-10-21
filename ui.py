@@ -267,7 +267,7 @@ def make_action_points(prefix, project_data, ap_cb, expanded=False):
         
         st.checkbox("Show target levels in plot",
                     key=prefix + "_plot_targets")
-        st.text_area("Project notes",
+        st.text_area("Assessment notes",
                      key=prefix + "_project_notes")
         ats = st.tabs(irl_cats)
 
@@ -389,7 +389,7 @@ def show_action_points(prefix, project_data, ap_cb, expanded=False):
     header = header % project_data.assessment_date
     irl_cats = ['CRL', 'TRL', 'BRL', 'IPRL', 'TMRL', 'FRL']
 
-    st.text_area("Project notes",
+    st.text_area("Assessment notes",
                  project_data.project_notes,
                  key=prefix + "_project_notes",
                  disabled=True)

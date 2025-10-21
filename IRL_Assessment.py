@@ -160,7 +160,7 @@ def on_IRL_ap_changed():
     ss.project.iprl_target_duedate = ss.ass_iprl_target_duedate
     ss.project.tmrl_target_duedate = ss.ass_tmrl_target_duedate
     ss.project.frl_target_duedate = ss.ass_frl_target_duedate
-    ss.project.update(True)
+    ss.project.update(overwrite=True)
 
     for irl in ['CRL', 'TRL', 'BRL', 'IPRL', 'TMRL', 'FRL']:
 
@@ -276,6 +276,7 @@ def on_save_assessment():
     """
     Save updated assessment values to database.
     """
+    irl_cats = ['crl', 'trl', 'brl', 'iprl', 'tmrl', 'frl']
     keep_ass = ss.get('keep_ass', None)
     irl_ass = ss.project
     old_ass_id = irl_ass.id
@@ -288,7 +289,6 @@ def on_save_assessment():
 
     # Update all values from UI values.
     irl_ass.project_description = ss.project_description
-    irl_ass.project_notes = ss.ass_project_notes
     irl_ass.crl = ss.crl
     irl_ass.trl = ss.trl
     irl_ass.brl = ss.brl
@@ -296,8 +296,19 @@ def on_save_assessment():
     irl_ass.tmrl = ss.tmrl
     irl_ass.frl = ss.frl
 
+    # Save assessment comments if set.
+    keep_ass_comments = ss.system_settings.forward_ass_comments
+
+    if keep_ass_comments:
+
+        irl_ass.project_notes = ss.ass_project_notes
+
+        for cat in irl_cats:
+
+            setattr(irl_ass, f"{cat}_notes", ss[f"ass_{cat}_notes"])
+
     # ...and save to database...
-    error = irl_ass.update()
+    error = irl_ass.update(keep_ass_notes=keep_ass_comments)
 
     if keep_ass:
 

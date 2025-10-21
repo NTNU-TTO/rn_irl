@@ -170,6 +170,7 @@ def login_view():
 
             st.success("Logged in as " + ss.user.username)
             st.button("Log out", on_click=onLogout)
+            ss.system_settings = base.get_system_settings()
 
         else:
 

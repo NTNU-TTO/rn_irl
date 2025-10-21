@@ -38,6 +38,9 @@ reporting_pg = st.Page("reporting.py",
 sys_settings_pg = st.Page("sys_settings.py",
                           title="System Settings",
                           icon=":material/settings:")
+user_manual_pg = st.Page("user_manual.py",
+                         title="User Manual",
+                         icon=":material/quiz:")
 user_settings_pg = st.Page("user_settings.py",
                            title="User Settings",
                            icon=":material/manage_accounts:")
@@ -70,7 +73,7 @@ def get_tools_n_settings(user):
 
         return [project_tools_pg,
                 reporting_pg,
-                
+
                 admin_tools_pg,
                 user_settings_pg,
                 sys_settings_pg]
