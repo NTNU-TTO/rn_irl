@@ -61,13 +61,16 @@ sys_settings = base.get_system_settings()
 cols1 = st.columns(3)
 cols1[0].text_input("Dark mode logo URI",
                     key="logo_uri_dark",
-                    value=sys_settings.logo_uri_dark)
+                    value=sys_settings.logo_uri_dark,
+                    help="URI to the logo to use in the top left corner when in dark mode. Must be on-line, as Streamlit doesn't support SVG images in-line.")
 cols1[1].text_input("Light mode logo URI",
                     key="logo_uri_light",
-                    value=sys_settings.logo_uri_light)
+                    value=sys_settings.logo_uri_light,
+                    help="URI to the logo to use in the top left corner when in light mode. Must be on-line, as Streamlit doesn't support SVG images in-line.")
 cols1[2].text_input("Logo web page link",
                     key='logo_uri',
-                    value=sys_settings.logo_uri)
+                    value=sys_settings.logo_uri,
+                    help="The web page to redirect users to when they click the logo image in the top left corner.")
 cols2 = st.columns(3, vertical_alignment="bottom")
 cols2[0].checkbox("Keep assessment comments",
                   key="forward_ass_comments",

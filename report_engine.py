@@ -91,8 +91,10 @@ def get_project_report(irl_ass):
     elements.append(Spacer(1, 12))
 
     # Fetch the plot
-    spider = plot_irl(irl_ass, ss.user_settings.smooth_irl, False, True
-                      )
+    spider = plot_irl(irl_ass,
+                      smooth=ss.user_settings.smooth_irl,
+                      dark_mode=False,
+                      targets=False)
     spider_buf = BytesIO()
     spider.savefig(spider_buf, format="png", bbox_inches="tight", dpi=300)
     spider_buf.seek(0)
