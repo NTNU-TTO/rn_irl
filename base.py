@@ -1967,7 +1967,25 @@ def get_action_points(irl_ass_id, irl_type=None):
 
         # This is hackish and the order matters as we have the active flag
         # for both users and team members. The latter overwrites the former.
-        row = ap.user.to_dict()
+        if ap.user is not None:
+
+            row = ap.user.to_dict()
+            print(row)
+
+        else:
+
+            row = {
+                'user_id': None,
+                'actual_name': None,
+                'username': None,
+                'password': None,
+                'rights': None,
+                'active': None,
+                'org_id': None,
+                'fac_id': None,
+                'dep_id': None
+            }
+
         row.update(ap.to_dict())
         points.append(row)
         user_objs.append(ap.user)

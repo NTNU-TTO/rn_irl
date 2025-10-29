@@ -88,6 +88,9 @@ else
         echo "RN IRL Database IRL Data table up to date, moving on..."
 fi
 
+echo "Making sure that plot_targets values are consistent and as expected..."
+sqlite3 "$IRL_PROD_DB" "UPDATE 'IRL Data' SET plot_targets = '0' WHERE plot_targets IS NULL;"
+
 echo "Double checking installed packages against requirements.txt..."
 source /etc/rn_irl_staging/bin/activate
 
