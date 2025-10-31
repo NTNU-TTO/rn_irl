@@ -221,7 +221,6 @@ def on_IRL_ap_changed():
             ap.insert()
 
     ss.refresh = True
-    ss.mom = create_mom()
 
 
 def on_history_changed():
