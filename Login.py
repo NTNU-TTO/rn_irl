@@ -52,6 +52,7 @@ def onLogout():
     ss.revision_r = None
     ss.projects = None
     ss.add_new_user_status = None
+    ss.pm_map = None
     ss.refresh = True
 
 
@@ -171,6 +172,9 @@ def login_view():
             st.success("Logged in as " + ss.user.username)
             st.button("Log out", on_click=onLogout)
             ss.system_settings = base.get_system_settings()
+            all_perms = base.get_permission_levels()
+            ss.pm_map = {perm.level: perm.level_text for perm in all_perms}
+            ss.reverse_pm_map = {perm.level_text: perm.level for perm in all_perms}
 
         else:
 

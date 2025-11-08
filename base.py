@@ -1234,7 +1234,7 @@ def change_user_rights(user, rights):
     session = Session()
 
     stmt = (update(User).where(
-        User.user_id == user.user_id).values(rights=rights.level))
+        User.user_id == user.user_id).values(rights=rights))
 
     try:
 

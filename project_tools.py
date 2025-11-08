@@ -168,7 +168,7 @@ def on_apply_project_team_changes():
 
             if col == 'access_level':
 
-                val = ss.pm_map[val]
+                val = ss.reverse_pm_map[val]
                 col = 'project_rights'
 
             setattr(team_member, col, val)

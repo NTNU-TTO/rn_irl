@@ -893,22 +893,20 @@ def change_user_rights():
         rights = old_user.rights
 
     p_levels = base.get_permission_levels()
-    p_index = [p_level.level for p_level in p_levels]
-    index = p_index.index(rights)
+    p_options = [p_level.level_text for p_level in p_levels]
 
     with cols[1]:
 
+        ss.old_permission_level = ss.pm_map[rights]
         st.selectbox("Old permission level",
-                     p_levels,
-                     index=index,
+                     p_options,
                      disabled=True,
                      key="old_permission_level")
 
     with cols[2]:
 
         st.selectbox("New permission level",
-                     p_levels,
-                     index=index,
+                     p_options,
                      key="new_permission_level")
 
     change_user_rights = st.button("Update user permissions")
@@ -920,6 +918,7 @@ def change_user_rights():
 
         if old_user is not None and rights is not None:
 
+            rights = ss.reverse_pm_map[rights]
             success = base.change_user_rights(old_user, rights)
 
             if success:
@@ -1411,10 +1410,8 @@ def edit_project_team(users, edit_cb, team_change_cb):
             ss.team_df = base.get_project_team(project.project_no, False)
 
         team = ss.team_df
-        all_perms = base.get_permission_levels()
-        perm_map = {perm.level: perm.level_text for perm in all_perms}
         project_perms = team.project_rights.to_list()
-        project_perms = [perm_map[pp] for pp in project_perms]
+        project_perms = [ss.pm_map[pp] for pp in project_perms]
         team["access_level"] = project_perms
         non_members = []
         team_sans_lead = []

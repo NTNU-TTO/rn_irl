@@ -4,6 +4,15 @@ Created on Tue Dec  3 12:36:46 2024
 
 @author: Lodve
 """
+import os
+
+if os.getenv("DEBUG_MODE") == "1":
+    import debugpy
+    debugpy.listen(5678)
+    print("Waiting for debugger attach...")
+    debugpy.wait_for_client()
+
+
 import streamlit as st
 
 import base
