@@ -201,6 +201,7 @@ def on_IRL_ap_changed():
             ap = base.ActionPoint()
             ap.assessment_id = ss.project.id
             ap.irl_type = irl
+            ap.active = 1
 
             for attr, val in row.items():
 
