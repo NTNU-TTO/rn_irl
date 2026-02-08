@@ -645,7 +645,7 @@ class ActionPoint(Base, SerializerMixin):
         new_self.due_date = self.due_date
         new_self.progress = self.progress
         new_self.comment = self.comment
-        new_self.deleted = False
+        new_self.active = 1
         new_self.insert()
 
     def insert(self):
@@ -671,7 +671,8 @@ class ActionPoint(Base, SerializerMixin):
               'responsible': self.responsible,
               'due_date': self.due_date,
               'progress': self.progress,
-              'comment': self.comment}
+              'comment': self.comment,
+              'ative': self.active}
         session.query(ActionPoint).filter(
                 ActionPoint.ap_id == self.ap_id).update(uv)
         session.commit()
