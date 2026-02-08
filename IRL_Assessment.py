@@ -168,6 +168,7 @@ def on_IRL_ap_changed():
         ap_df = ss.get("ass_%s_df" % irl.lower())
         edited_rows = aps_changes["edited_rows"]
         added_rows = aps_changes["added_rows"]
+        deleted_rows = aps_changes["deleted_rows"]
 
         for row in edited_rows:
 
@@ -219,6 +220,13 @@ def on_IRL_ap_changed():
                 setattr(ap, attr, val)
 
             ap.insert()
+
+        for row in deleted_rows:
+
+            ap_id = int(ap_df.at[row, "ap_id"])
+            ap = base.get_ap(ap_id)
+            setattr(ap, "active", 0)
+            del ap
 
     ss.refresh = True
 

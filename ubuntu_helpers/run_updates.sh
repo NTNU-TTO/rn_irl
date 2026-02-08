@@ -88,6 +88,15 @@ else
         echo "RN IRL Database IRL Data table up to date, moving on..."
 fi
 
+HAS_COL=$(sqlite3 "$IRL_PROD_DB" "SELECT active FROM 'Action Points';" 2>&1)
+
+if [[ "$HAS_COL" == *"$ERROR"* ]]; then
+        echo "RN IRL Database Action Points table not up to date, adding column active."
+        sqlite3 "$IRL_PROD_DB" 'ALTER TABLE "Action Points" ADD COLUMN active INTEGER(1) DEFAULT 1;'
+else
+        echo "RN IRL Database Action Points table up to date, moving on..."
+fi
+
 echo "Making sure that plot_targets values are consistent and as expected..."
 sqlite3 "$IRL_PROD_DB" "UPDATE 'IRL Data' SET plot_targets = '0' WHERE plot_targets IS NULL;"
 

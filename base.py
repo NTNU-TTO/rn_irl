@@ -618,6 +618,7 @@ class ActionPoint(Base, SerializerMixin):
     due_date = Column(Text(10))
     progress = Column(Integer)
     comment = Column(Text)
+    active = Column(Integer)
 
     user = relationship("User", backref="ActionPoint")
 
@@ -644,6 +645,7 @@ class ActionPoint(Base, SerializerMixin):
         new_self.due_date = self.due_date
         new_self.progress = self.progress
         new_self.comment = self.comment
+        new_self.deleted = False
         new_self.insert()
 
     def insert(self):
@@ -1957,6 +1959,7 @@ def get_action_points(irl_ass_id, irl_type=None):
     else:
 
         aps = session.query(ActionPoint).filter(
+            (ActionPoint.active == 1) &
             (ActionPoint.assessment_id == irl_ass_id) &
             (ActionPoint.irl_type == irl_type)).all()
 

@@ -13,6 +13,7 @@ if os.getenv("DEBUG_MODE") == "1":
     debugpy.wait_for_client()
 
 
+
 import streamlit as st
 
 import base
@@ -44,6 +45,9 @@ project_tools_pg = st.Page("project_tools.py",
 reporting_pg = st.Page("reporting.py",
                         title="Reports",
                         icon=":material/description:")
+super_admin_tools_pg = st.Page("super_admin_tools_ui.py",
+                              title="SuperAdmin Tools",
+                              icon=":material/admin_panel_settings:")
 sys_settings_pg = st.Page("sys_settings.py",
                           title="System Settings",
                           icon=":material/settings:")
@@ -82,11 +86,18 @@ def get_tools_n_settings(user):
 
         return [project_tools_pg,
                 reporting_pg,
-
                 admin_tools_pg,
                 user_settings_pg,
                 sys_settings_pg]
 
+    elif user.rights == 99:
+
+        return [project_tools_pg,
+                reporting_pg,
+                admin_tools_pg,
+                super_admin_tools_pg,
+                user_settings_pg,
+                sys_settings_pg]
 
 owner_org_id = base.get_system_settings().owner_org_id
 
