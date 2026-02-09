@@ -100,6 +100,12 @@ fi
 echo "Making sure that plot_targets values are consistent and as expected..."
 sqlite3 "$IRL_PROD_DB" "UPDATE 'IRL Data' SET plot_targets = '0' WHERE plot_targets IS NULL;"
 
+echo "Making sure that existing action_points active..."
+sqlite3 "$IRL_PROD_DB" "UPDATE 'Action Points' SET active = '1' WHERE active IS NULL;"
+
+echo "Adding SuperAdministrator permission level if not present..."
+sqlite3 "$IRL_PROD_DB" "INSERT OR IGNORE INTO 'Permission Levels' (level, level_text) VALUES (99, 'SuperAdministrator');"
+
 echo "Double checking installed packages against requirements.txt..."
 source /etc/rn_irl_staging/bin/activate
 

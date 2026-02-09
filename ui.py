@@ -554,7 +554,7 @@ def show_action_points_table(project_data, expanded=False):
         st.subheader(text)
         st.markdown(HIDE_TABLE_ROW_INDEX, unsafe_allow_html=True)
         st.markdown(overview.
-                    style.applymap(irl_color,
+                    style.map(irl_color,
                                    subset=['Current', 'Target']).
                     to_html(),
                     unsafe_allow_html=True)
@@ -567,8 +567,8 @@ def show_action_points_table(project_data, expanded=False):
 
             st.markdown(HIDE_TABLE_ROW_INDEX, unsafe_allow_html=True)
             st.markdown(overview.
-                        style.applymap(irl_color,
-                                       subset=['Current', 'Target']).
+                        style.map(irl_color,
+                                  subset=['Current', 'Target']).
                         to_html(),
                         unsafe_allow_html=True)
 
@@ -630,9 +630,9 @@ def show_progress(project_data0, project_data1, expanded=False):
 
         st.subheader(text)
         st.markdown(HIDE_TABLE_ROW_INDEX, unsafe_allow_html=True)
-        st.markdown(progress.style.applymap(irl_color,
-                                            subset=['Previous',
-                                                    'Current']).to_html(),
+        st.markdown(progress.style.map(irl_color,
+                                       subset=['Previous',
+                                       'Current']).to_html(),
                     unsafe_allow_html=True)
 
     else:
@@ -643,9 +643,9 @@ def show_progress(project_data0, project_data1, expanded=False):
 
             st.subheader(text)
             st.markdown(HIDE_TABLE_ROW_INDEX, unsafe_allow_html=True)
-            st.markdown(progress.style.applymap(irl_color,
-                                                subset=['Previous',
-                                                        'Current']).to_html(),
+            st.markdown(progress.style.map(irl_color,
+                                           subset=['Previous',
+                                           'Current']).to_html(),
                         unsafe_allow_html=True)
 
 
@@ -1131,8 +1131,8 @@ def irl_explainer():
             crl_sdesc = crl_df[['Level', 'Description']]
             st.markdown(hide_table_row_index,
                         unsafe_allow_html=True)
-            st.markdown(crl_sdesc.style.applymap(irl_color,
-                                                 subset=['Level']).
+            st.markdown(crl_sdesc.style.map(irl_color,
+                                            subset=['Level']).
                         to_html(escape=False),
                         unsafe_allow_html=True)
 
@@ -1141,8 +1141,8 @@ def irl_explainer():
             crl_desc = crl_df[['Level', 'Aspects']]
             st.markdown(hide_table_row_index,
                         unsafe_allow_html=True)
-            st.markdown(crl_desc.style.applymap(irl_color,
-                                                subset=['Level']).
+            st.markdown(crl_desc.style.map(irl_color,
+                                           subset=['Level']).
                         to_html(escape=False),
                         unsafe_allow_html=True)
 
@@ -1164,8 +1164,8 @@ def irl_explainer():
             trl_sdesc = trl_df[['Level', 'Description']]
             st.markdown(hide_table_row_index,
                         unsafe_allow_html=True)
-            st.markdown(trl_sdesc.style.applymap(irl_color,
-                                                 subset=['Level']).
+            st.markdown(trl_sdesc.style.map(irl_color,
+                                            subset=['Level']).
                         to_html(escape=False),
                         unsafe_allow_html=True)
 
@@ -1174,8 +1174,8 @@ def irl_explainer():
             trl_desc = trl_df[['Level', 'Aspects']]
             st.markdown(hide_table_row_index,
                         unsafe_allow_html=True)
-            st.markdown(trl_desc.style.applymap(irl_color,
-                                                subset=['Level']).
+            st.markdown(trl_desc.style.map(irl_color,
+                                           subset=['Level']).
                         to_html(escape=False),
                         unsafe_allow_html=True)
 
@@ -1198,8 +1198,8 @@ def irl_explainer():
             brl_sdesc = brl_df[['Level', 'Description']]
             st.markdown(hide_table_row_index,
                         unsafe_allow_html=True)
-            st.markdown(brl_sdesc.style.applymap(irl_color,
-                                                 subset=['Level']).
+            st.markdown(brl_sdesc.style.map(irl_color,
+                                            subset=['Level']).
                         to_html(escape=False),
                         unsafe_allow_html=True)
 
@@ -1208,8 +1208,8 @@ def irl_explainer():
             brl_desc = brl_df[['Level', 'Aspects']]
             st.markdown(hide_table_row_index,
                         unsafe_allow_html=True)
-            st.markdown(brl_desc.style.applymap(irl_color,
-                                                subset=['Level']).
+            st.markdown(brl_desc.style.map(irl_color,
+                                           subset=['Level']).
                         to_html(escape=False),
                         unsafe_allow_html=True)
 
@@ -1231,8 +1231,8 @@ def irl_explainer():
             iprl_sdesc = iprl_df[['Level', 'Description']]
             st.markdown(hide_table_row_index,
                         unsafe_allow_html=True)
-            st.markdown(iprl_sdesc.style.applymap(irl_color,
-                                                  subset=['Level']).
+            st.markdown(iprl_sdesc.style.map(irl_color,
+                                             subset=['Level']).
                         to_html(escape=False),
                         unsafe_allow_html=True)
 
@@ -1241,8 +1241,8 @@ def irl_explainer():
             iprl_desc = iprl_df[['Level', 'Aspects']]
             st.markdown(hide_table_row_index,
                         unsafe_allow_html=True)
-            st.markdown(iprl_desc.style.applymap(irl_color,
-                                                 subset=['Level']).
+            st.markdown(iprl_desc.style.map(irl_color,
+                                            subset=['Level']).
                         to_html(escape=False),
                         unsafe_allow_html=True)
 
@@ -1267,8 +1267,8 @@ def irl_explainer():
             tmrl_sdesc = tmrl_df[['Level', 'Description']]
             st.markdown(hide_table_row_index,
                         unsafe_allow_html=True)
-            st.markdown(tmrl_sdesc.style.applymap(irl_color,
-                                                  subset=['Level']).
+            st.markdown(tmrl_sdesc.style.map(irl_color,
+                                             subset=['Level']).
                         to_html(escape=False),
                         unsafe_allow_html=True)
 
@@ -1277,8 +1277,8 @@ def irl_explainer():
             tmrl_desc = tmrl_df[['Level', 'Aspects']]
             st.markdown(hide_table_row_index,
                         unsafe_allow_html=True)
-            st.markdown(tmrl_desc.style.applymap(irl_color,
-                                                 subset=['Level']).
+            st.markdown(tmrl_desc.style.map(irl_color,
+                                            subset=['Level']).
                         to_html(escape=False),
                         unsafe_allow_html=True)
 
@@ -1302,7 +1302,7 @@ def irl_explainer():
             frl_sdesc = frl_df[['Level', 'Description']]
             st.markdown(hide_table_row_index,
                         unsafe_allow_html=True)
-            st.markdown(frl_sdesc.style.applymap(irl_color,
+            st.markdown(frl_sdesc.style.map(irl_color,
                                                  subset=['Level']).
                         to_html(escape=False),
                         unsafe_allow_html=True)
@@ -1312,7 +1312,7 @@ def irl_explainer():
             frl_desc = frl_df[['Level', 'Aspects']]
             st.markdown(hide_table_row_index,
                         unsafe_allow_html=True)
-            st.markdown(frl_desc.style.applymap(irl_color,
+            st.markdown(frl_desc.style.map(irl_color,
                                                 subset=['Level']).
                         to_html(escape=False),
                         unsafe_allow_html=True)

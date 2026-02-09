@@ -672,7 +672,7 @@ class ActionPoint(Base, SerializerMixin):
               'due_date': self.due_date,
               'progress': self.progress,
               'comment': self.comment,
-              'ative': self.active}
+              'active': self.active}
         session.query(ActionPoint).filter(
                 ActionPoint.ap_id == self.ap_id).update(uv)
         session.commit()
@@ -1974,7 +1974,7 @@ def get_action_points(irl_ass_id, irl_type=None):
         if ap.user is not None:
 
             row = ap.user.to_dict()
-            print(row)
+            
 
         else:
 

@@ -227,6 +227,7 @@ def on_IRL_ap_changed():
             ap_id = int(ap_df.at[row, "ap_id"])
             ap = base.get_ap(ap_id)
             setattr(ap, "active", 0)
+            ap.update()
             del ap
 
     ss.refresh = True
