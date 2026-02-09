@@ -696,11 +696,21 @@ else:
 
     else:
 
-        st.sidebar.selectbox("Select project:",
+
+        if "project" not in ss or ss.project is None:
+
+            ss.project = ss.projects[index] if ss.projects else None
+
+        selected_project = st.sidebar.selectbox("Select project:",
                              ss.projects,
                              index=index,
-                             key='project',
+                             key='project_selector',
                              on_change=on_project_changed)
+
+        if selected_project != ss.project:
+
+           ss.project = selected_project
+           on_project_changed()
 
         if ss.project is None:
 
