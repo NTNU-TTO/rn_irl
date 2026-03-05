@@ -503,10 +503,10 @@ class Organisation(Base):
     active = Column(Integer)
 
     def __str__(self):
-        return self.org_name
+        return self.org_name or f"Organisation {self.org_id} has no name set!"
 
     def __repr__(self):
-        return self.org_name
+        return self.org_name or f"Organisation {self.org_id} has no name set!"
 
 
 class Faculty(Base):
@@ -535,10 +535,10 @@ class Department(Base):
     active = Column(Integer)
 
     def __str__(self):
-        return self.dep_name
+        return self.dep_name or f"Department {self.dep_id} has no name set!"
 
     def __repr__(self):
-        return self.dep_name
+        return self.dep_name or f"Department {self.dep_id} has no name set!"
 
 
 class ProjectTeam(Base, SerializerMixin):
@@ -580,10 +580,11 @@ class ProjectTeam(Base, SerializerMixin):
         return errors
 
     def __str__(self):
-        return self.user.actual_name
+        return self.user.actual_name or f"User with id {self.user_id} has no name set!"
 
     def __repr__(self):
-        return self.user.actual_name
+        return self.user.actual_name or f"User with id {self.user_id} has no name set!"
+
 
 
 @dataclass
