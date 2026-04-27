@@ -3,8 +3,8 @@
 # Update database if needed.
 ERROR="no such column"
 IRL_REV="Version F released 2025"
-APP_VER="0.6.260427"
-DB_VER="0.6.260427"
+APP_VERSION="0.6.260427"
+DB_VERSION="0.6.260427"
 IRL_PROD_DB="/var/lib/rn_irl/irl.sdb"
 IRL_GIT_DB="/etc/rn_irl_staging/bin/rn_irl/irl.sdb"
 HAS_COL=$(sqlite3 "$IRL_PROD_DB" "SELECT show_valuations FROM 'System Settings';" 2>&1)
