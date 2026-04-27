@@ -3,6 +3,8 @@
 # Update database if needed.
 ERROR="no such column"
 IRL_REV="Version F released 2025"
+APP_VER="0.6.260427"
+DB_VER="0.6.260427"
 IRL_PROD_DB="/var/lib/rn_irl/irl.sdb"
 IRL_GIT_DB="/etc/rn_irl_staging/bin/rn_irl/irl.sdb"
 HAS_COL=$(sqlite3 "$IRL_PROD_DB" "SELECT show_valuations FROM 'System Settings';" 2>&1)
@@ -95,6 +97,28 @@ if [[ "$HAS_COL" == *"$ERROR"* ]]; then
         sqlite3 "$IRL_PROD_DB" 'ALTER TABLE "Action Points" ADD COLUMN active INTEGER(1) DEFAULT 1;'
 else
         echo "RN IRL Database Action Points table up to date, moving on..."
+fi
+
+HAS_COL=$(sqlite3 "$IRL_PROD_DB" "SELECT app_version FROM 'System Settings';" 2>&1)
+
+if [[ "$HAS_COL" == *"$ERROR"* ]]; then
+        echo "RN IRL Database System Settings table not up to date, adding column app_version."
+        sqlite3 "$IRL_PROD_DB" 'ALTER TABLE "System Settings" ADD COLUMN app_version TEXT;'
+        sqlite3 "$IRL_PROD_DB" "UPDATE \"System Settings\" SET app_version='$APP_VERSION';"
+else
+        sqlite3 "$IRL_PROD_DB" "UPDATE \"System Settings\" SET app_version='$APP_VERSION';"
+        echo "RN IRL Database App Version updated."
+fi
+
+HAS_COL=$(sqlite3 "$IRL_PROD_DB" "SELECT db_version FROM 'System Settings';" 2>&1)
+
+if [[ "$HAS_COL" == *"$ERROR"* ]]; then
+        echo "RN IRL Database System Settings table not up to date, adding column db_version."
+        sqlite3 "$IRL_PROD_DB" 'ALTER TABLE "System Settings" ADD COLUMN db_version TEXT;'
+        sqlite3 "$IRL_PROD_DB" "UPDATE \"System Settings\" SET db_version='$DB_VERSION';"
+else
+        sqlite3 "$IRL_PROD_DB" "UPDATE \"System Settings\" SET db_version='$DB_VERSION';"
+        echo "RN IRL Database DB Version updated."
 fi
 
 echo "Making sure that plot_targets values are consistent and as expected..."

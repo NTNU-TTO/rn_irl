@@ -107,6 +107,24 @@ def get_project_history(project_id):
     ss.project_history = irl_data
 
 
+def get_previous_ass(project_id):
+
+    irl_data = base.get_project_history(project_id)
+
+    if len(irl_data) > 1:
+
+        return irl_data[-2]
+    
+    else:
+
+        return None
+
+
+def get_initial_ass(project_id):
+    irl_data = base.get_project_history(project_id)
+    return irl_data[0] if irl_data else None
+
+
 def get_project_team(user):
 
     users = base.get_users()

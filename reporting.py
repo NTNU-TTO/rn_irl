@@ -20,8 +20,6 @@ along with Really Nice IRL. If not, see:
 """
 
 import streamlit as st
-import base
-import data_viz
 import ui
 import report_engine
 
@@ -69,19 +67,21 @@ with proj:
 
 if portfolio:
 
-    with report_engine.AVAILABLE_REPORTS[ss.selected_report][0](ss.selected_rep_projects) as pdf_buffer:
-        st.download_button(
-            label="Save portfolio report to Downloads folder",
-            data=pdf_buffer,
-            file_name=f"Portfolio_report.pdf",
-            mime="application/pdf"
-        )
+    pdf_buffer, filename = report_engine.AVAILABLE_REPORTS[ss.selected_report][0](ss.selected_rep_projects)
+    
+    st.download_button(
+        label="Save portfolio report to Downloads folder",
+        data=pdf_buffer,
+        file_name=filename,
+        mime="application/pdf"
+    )
+    
 else:
 
-    with report_engine.AVAILABLE_REPORTS[ss.selected_report][0](ss.selected_rep_project) as pdf_buffer:
-        st.download_button(
-            label="Save project report to Downloads folder",
-            data=pdf_buffer,
-            file_name=f"{ss.selected_rep_project.project_no}_{ss.selected_rep_project.project_name}_report.pdf",
-            mime="application/pdf"
-        )
+    pdf_buffer, filename = report_engine.AVAILABLE_REPORTS[ss.selected_report][0](ss.selected_rep_project)
+    st.download_button(
+        label="Save project report to Downloads folder",
+        data=pdf_buffer,
+        file_name=filename,
+        mime="application/pdf"
+    )
