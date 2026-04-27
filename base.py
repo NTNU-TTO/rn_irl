@@ -467,6 +467,8 @@ class SystemSettings(Base):
     noreply_body = Column(Text)
     irl_revision = Column(Text)
     forward_ass_comments = Column(Integer)
+    app_version = Column(Text)
+    db_version = Column(Text)
 
     def update(self):
 

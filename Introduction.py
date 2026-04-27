@@ -39,9 +39,14 @@ def get_version(pkg):
 
         if pkg == "rn_irl":
 
-            version = "development version"
+            version = base.get_system_settings().app_version
+
+        elif pkg == "rn_irl_db":
+
+            version = base.get_system_settings().db_version
 
     return version
+
 
 libs = ["bcrypt", "matplotlib", "numpy", "pandas", "reportlab", "scipy", "streamlit", "sqlalchemy"]  # Add your libraries here
 
@@ -140,14 +145,17 @@ with play:
 
 with version:
 
+    app_version = get_version("rn_irl")
+    db_version = get_version("rn_irl_db")
     st.header("About Really Nice IRL")
     body = "Really Nice IRL is developed and maintained by Lodve Berre.  \n"
     body += "The app is open source under the APGL3.0 licene and available on at https://github.com/NTNU-TTO/rn_irl/  \n"
-    body += "The current version of Really Nice IRL is: **{}**  \n".format(get_version("rn_irl"))
+    body += "The current version of Really Nice IRL Application is: **{}**  \n".format(app_version)
+    body += "The current version of Really Nice IRL Database is: **{}**  \n".format(db_version)
     body += "The versions of the main libraries used in the app are:"
     st.markdown(body)
 
-     # Use HTML for indentation
+    # Use HTML for indentation
     lib_versions = "".join(
         [f"<div style='margin-left:2em;'>• <b>{lib}</b>: {get_version(lib)}</div>" for lib in libs]
     )
